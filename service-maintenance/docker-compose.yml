@@ -1,0 +1,34 @@
+version: "3.6"
+
+services:
+    webpack:
+        container_name: maintenance-webpack
+        image: node:14.13.1-alpine3.12
+        working_dir: /app
+        entrypoint: |
+            sh -c "npm i && npm run watch"
+        volumes:
+            - .:/app:rw,delegated
+        ports:
+            - 9006:9006
+
+# # This definition runs a continuous build process that monitors
+# # golang files for changes and rebuilds/runs. This is disabled
+# # by default as the prefered way is to use your IDE to run it
+
+#     maintenance:
+#         container_name: maintenance-app
+#         build:
+#           context: .
+#           dockerfile: Dockerfile
+#         working_dir: /app
+#         entrypoint: |
+#             bash -c '\
+#                 go get github.com/cespare/reflex
+#                 go mod download
+#                 reflex -s -r "\.go" go run cmd/maintenance/main.go
+#             '
+#         volumes:
+#             - .:/app
+#         ports:
+#             - 9005:9005
