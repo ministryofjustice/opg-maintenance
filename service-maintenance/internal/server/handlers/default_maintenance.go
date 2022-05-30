@@ -11,7 +11,7 @@ func DefaultMaintenanceHandler() http.HandlerFunc {
 		log.Ctx(r.Context()).Debug().Msg("viewed the default maintenance page")
 
 		templateWriterService := NewTemplateWriterService()
-		if err := templateWriterService.RenderTemplate(w, r.Context(), "defaultmaintenance.page.gohtml", nil); err != nil {
+		if err := templateWriterService.RenderTemplate(w, r.Context(), "default_maintenance.page.gohtml", nil); err != nil {
 			log.Panic().Err(err).Msg(err.Error())
 		}
 	}
