@@ -36,3 +36,11 @@ jobs:
           PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
           RELEASE_BRANCHES: main
           WITH_V: true
+  job2:
+    name: Use previous output
+    needs: versioning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print output from previous setp
+        id: echo_version
+      - run: echo ${{needs.versioning.outputs.new_tag}}
