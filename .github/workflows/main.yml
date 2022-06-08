@@ -13,8 +13,8 @@ defaults:
     shell: bash
 
 jobs:
-  versioning:
-    name: Bump Version
+  build_and_push:
+    name: Build and Push
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,15 +34,16 @@ jobs:
         run: |
           docker build -t maintenance-app .
       - name: Trivy Image Vulnerability Scanner
+        id: trivy_scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: costs-to-metrics:latest
+          image-ref: maintenance-app:latest
           severity: 'HIGH,CRITICAL'
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
-
       - name: Upload Trivy scan results to GitHub Security tab
+        id: trivy_upload_sarif
         uses: github/codeql-action/upload-sarif@v1
         if: always()
         with:
@@ -69,4 +70,4 @@ jobs:
     steps:
       - name: Print output from previous step
         id: echo_version
-        run: echo "version - ${{needs.versioning.outputs.version_tag}}"
+        run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
