@@ -16,6 +16,9 @@ jobs:
   versioning:
     name: Bump Version
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: service-maintenance
     steps:
       - uses: actions/checkout@v2
       - name: Extract branch name
@@ -26,6 +29,10 @@ jobs:
           else
             echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
           fi
+      - name: Build Image
+        id: build_image
+        run: |
+          docker build -t maintenance-app .
       - name: Bump version
         id: bump_version
         uses: anothrNick/github-tag-action@1.36.0
