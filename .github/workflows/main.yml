@@ -28,7 +28,7 @@ jobs:
           fi
       - name: Bump version
         id: bump_version
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: anothrNick/github-tag-action@1.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INITIAL_VERSION: 0.0.0
@@ -36,6 +36,13 @@ jobs:
           PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
           RELEASE_BRANCHES: main
           WITH_V: true
+    outputs:
+      version_tag: ${{steps.bump_version.outputs.tag}}
+  job2:
+    name: Use previous output
+    runs-on: ubuntu-latest
+    needs: versioning
+    steps:
       - name: Print output from previous step
         id: echo_version
-        run: echo "version - ${{steps.bump_version.outputs.tag}}"
+        run: echo "version - ${{needs.versioning.outputs.version_tag}}"
