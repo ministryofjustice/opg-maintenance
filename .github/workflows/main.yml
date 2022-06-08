@@ -39,8 +39,8 @@ jobs:
       - name: Print output from previous step
         id: echo_version
         run: echo "version - ${{steps.bump_version.outputs.tag}}"
-    outputs:
-      version_tag: ${{steps.bump_version.outputs.tag}}
+    # outputs:
+    #   version_tag: ${{steps.bump_version.outputs.tag}}
   job2:
     name: Use previous output
     runs-on: ubuntu-latest
