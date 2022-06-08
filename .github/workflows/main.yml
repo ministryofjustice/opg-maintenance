@@ -38,7 +38,7 @@ jobs:
           WITH_V: true
       - name: Print output from previous step
         id: echo_version
-        run: echo "version - ${{steps.bump_version.outputs.tag}}"
+        run: echo "version - ${{steps.bump_version.outputs.new_tag}}"
     # outputs:
     #   version_tag: ${{steps.bump_version.outputs.tag}}
   job2:
