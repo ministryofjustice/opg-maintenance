@@ -81,14 +81,11 @@ jobs:
           MAINTENANCE_ECR_REPOSITORY: maintenance/maintenance_app
         run: |
           docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ steps.bump_version.outputs.tag }}
-          docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
           if [ $BRANCH_NAME == "main" ]; then
             docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${{ steps.bump_version.outputs.tag }}
-            # We want all of the tags pushed
-            docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
-          else
-            docker push $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ steps.bump_version.outputs.tag }}
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
           fi
+            docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
     outputs:
       version_tag: ${{steps.bump_version.outputs.tag}}
   job2:
