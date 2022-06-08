@@ -20,46 +20,46 @@ jobs:
       run:
         working-directory: service-maintenance
     steps:
-      # - uses: actions/checkout@v2
-      # - name: Extract branch name
-      #   id: extract_branch
-      #   run: |
-      #     if [ "$GITHUB_EVENT_NAME" == "push" ]; then
-      #       echo BRANCH_NAME=main >> $GITHUB_ENV
-      #     else
-      #       echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
-      #     fi
-      # - name: Build Image
-      #   id: build_image
-      #   run: |
-      #     docker build -t maintenance-app .
-      # - name: Trivy Image Vulnerability Scanner
-      #   id: trivy_scan
-      #   uses: aquasecurity/trivy-action@0.3.0
-      #   with:
-      #     image-ref: maintenance-app:latest
-      #     severity: 'HIGH,CRITICAL'
-      #     format: 'sarif'
-      #     output: 'trivy-results.sarif'
-      # - name: Upload Trivy scan results to GitHub Security tab
-      #   id: trivy_upload_sarif
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   if: always()
-      #   with:
-      #     sarif_file: 'trivy-results.sarif'
-      # - name: Bump version
-      #   id: bump_version
-      #   uses: anothrNick/github-tag-action@1.36.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     INITIAL_VERSION: 0.0.0
-      #     DEFAULT_BUMP: minor
-      #     PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
-      #     RELEASE_BRANCHES: main
-      #     WITH_V: true
-      # - name: Print output from previous step
-      #   id: echo_version
-      #   run: echo "version - ${{steps.bump_version.outputs.new_tag}}"
+      - uses: actions/checkout@v2
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          if [ "$GITHUB_EVENT_NAME" == "push" ]; then
+            echo BRANCH_NAME=main >> $GITHUB_ENV
+          else
+            echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
+          fi
+      - name: Build Image
+        id: build_image
+        run: |
+          docker build -t maintenance-app .
+      - name: Trivy Image Vulnerability Scanner
+        id: trivy_scan
+        uses: aquasecurity/trivy-action@0.3.0
+        with:
+          image-ref: maintenance-app:latest
+          severity: 'HIGH,CRITICAL'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      - name: Upload Trivy scan results to GitHub Security tab
+        id: trivy_upload_sarif
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+      - name: Bump version
+        id: bump_version
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INITIAL_VERSION: 0.0.0
+          DEFAULT_BUMP: minor
+          PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
+          RELEASE_BRANCHES: main
+          WITH_V: true
+      - name: Print output from previous step
+        id: echo_version
+        run: echo "version - ${{steps.bump_version.outputs.tag}}"
       - uses: unfor19/install-aws-cli-action@v1
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1.6.1
@@ -69,12 +69,26 @@ jobs:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
           role-duration-seconds: 900
-          # role-session-name: OPGMaintenanceGithubAction
+          role-session-name: OPGMaintenanceGithubAction
       - name: ECR Login
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1.4.0
         with:
           registries: 311462405659
+      - name: Push Container
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          MAINTENANCE_ECR_REPOSITORY: maintenance/maintenance_app
+        run: |
+          docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ steps.bump_version.outputs.tag }}
+          docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
+          if [ $BRANCH_NAME == "main" ]; then
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${{ steps.bump_version.outputs.tag }}
+            # We want all of the tags pushed
+            docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
+          else
+            docker push $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ steps.bump_version.outputs.tag }}
+          fi
     outputs:
       version_tag: ${{steps.bump_version.outputs.tag}}
   job2:
