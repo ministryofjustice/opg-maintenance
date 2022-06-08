@@ -33,6 +33,20 @@ jobs:
         id: build_image
         run: |
           docker build -t maintenance-app .
+      - name: Trivy Image Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: costs-to-metrics:latest
+          severity: 'HIGH,CRITICAL'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
       - name: Bump version
         id: bump_version
         uses: anothrNick/github-tag-action@1.36.0
