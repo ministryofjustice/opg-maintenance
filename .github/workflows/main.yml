@@ -43,4 +43,4 @@ jobs:
     steps:
       - name: Print output from previous setp
         id: echo_version
-        run: echo ${{steps.versioning.outputs.new_tag}}
+        run: echo "version - ${{steps.versioning.outputs.new_tag}}"
