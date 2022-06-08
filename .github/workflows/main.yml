@@ -48,7 +48,7 @@ jobs:
         run: go test -race -coverpkg ./... -covermode=atomic -coverprofile=coverage.out -v ./...
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
 
       - name: Extract branch name
         id: extract_branch
