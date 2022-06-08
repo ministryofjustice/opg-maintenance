@@ -39,8 +39,7 @@ jobs:
         with:
           image-ref: maintenance-app:latest
           severity: 'HIGH,CRITICAL'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
+          format: 'sarif'
           output: 'trivy-results.sarif'
       - name: Upload Trivy scan results to GitHub Security tab
         id: trivy_upload_sarif
