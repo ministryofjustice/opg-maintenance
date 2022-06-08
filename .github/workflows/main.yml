@@ -1,4 +1,4 @@
-name: Main
+name: PR Workflow
 
 on:
   pull_request:
@@ -26,7 +26,7 @@ defaults:
 
 jobs:
   build_and_push:
-    name: Build and Push
+    name: Test, Build and Push
     runs-on: ubuntu-latest
     defaults:
       run:
