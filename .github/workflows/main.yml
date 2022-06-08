@@ -69,7 +69,7 @@ jobs:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
           role-duration-seconds: 900
-          role-session-name: OPGMaintenanceGithubAction
+          # role-session-name: OPGMaintenanceGithubAction
       - name: ECR Login
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1.4.0
