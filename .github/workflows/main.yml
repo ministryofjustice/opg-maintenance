@@ -8,6 +8,18 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: read
+  actions: none
+  checks: none
+  deployments: none
+  issues: none
+  packages: none
+  repository-projects: none
+  statuses: none
+
 defaults:
   run:
     shell: bash
@@ -21,6 +33,7 @@ jobs:
         working-directory: service-maintenance
     steps:
       - uses: actions/checkout@v3
+
       - name: Extract branch name
         id: extract_branch
         run: |
@@ -29,10 +42,12 @@ jobs:
           else
             echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
           fi
+
       - name: Build Image
         id: build_image
         run: |
           docker build -t maintenance-app .
+
       - name: Trivy Image Vulnerability Scanner
         id: trivy_scan
         uses: aquasecurity/trivy-action@0.3.0
@@ -41,12 +56,14 @@ jobs:
           severity: 'HIGH,CRITICAL'
           format: 'sarif'
           output: 'trivy-results.sarif'
+
       - name: Upload Trivy scan results to GitHub Security tab
         id: trivy_upload_sarif
         uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+
       - name: Bump version
         id: bump_version
         uses: anothrNick/github-tag-action@1.36.0
@@ -57,8 +74,11 @@ jobs:
           PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
           RELEASE_BRANCHES: main
           WITH_V: true
+
       - uses: unfor19/install-aws-cli-action@v1
+
       - name: Configure AWS Credentials
+
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ACTIONS }}
@@ -67,11 +87,13 @@ jobs:
           role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
           role-duration-seconds: 900
           role-session-name: OPGMaintenanceGithubAction
+
       - name: ECR Login
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@v1.4.0
         with:
           registries: 311462405659
+
       - name: Push Container
         env:
           ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
@@ -83,6 +105,7 @@ jobs:
             docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
           fi
             docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
+
     outputs:
       version_tag: ${{steps.bump_version.outputs.tag}}
   # job2:
