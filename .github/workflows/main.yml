@@ -93,6 +93,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push
     steps:
-      - name: Print output from previous step
+      - name: Print output from previous a job
         id: echo_version
         run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
