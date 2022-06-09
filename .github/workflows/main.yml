@@ -1,4 +1,4 @@
-name: Main
+name: PR Workflow
 
 on:
   pull_request:
@@ -26,13 +26,29 @@ defaults:
 
 jobs:
   build_and_push:
-    name: Build and Push
+    name: Test, Build and Push
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: service-maintenance
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Build
+        id: build_go_app
+        run: go build -v ./...
+
+      - name: Test
+        id: test_go_app_with_coverage
+        run: go test -race -coverpkg ./... -covermode=atomic -coverprofile=coverage.out -v ./...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
 
       - name: Extract branch name
         id: extract_branch

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func DefaultMaintenanceHandler(t *testing.T) {
+func TestDefaultMaintenanceHandler(t *testing.T) {
 	t.Parallel()
 
 	handler := server.WithTemplates(
@@ -22,7 +22,7 @@ func DefaultMaintenanceHandler(t *testing.T) {
 	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/maintenance", nil, "Maintenance")
 }
 
-func DefaultMaintenanceHandler_WithBadTemplate(t *testing.T) {
+func TestDefaultMaintenanceHandler_WithBadTemplate(t *testing.T) {
 	t.Parallel()
 
 	memfs := afero.NewMemMapFs()
