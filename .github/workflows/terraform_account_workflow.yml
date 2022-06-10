@@ -43,12 +43,14 @@ jobs:
         working-directory: ./terraform/account
         continue-on-error: true
 
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: ./terraform/account
+
       - name: Terraform Plan
         env:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
-        run: |
-          terraform init -input=false
-          terraform plan -lock-timeout=300s -input=false -parallelism=30
+        run: terraform plan -lock-timeout=300s -input=false -parallelism=30
         working-directory: ./terraform/account
 
       # - name: Terraform Apply
