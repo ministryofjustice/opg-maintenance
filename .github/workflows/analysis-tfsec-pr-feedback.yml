@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        terraform_path: ['terraform/environment', 'terraform/account', 'terraform/region']
+        terraform_path: ['terraform/account']
     steps:
       - name: checkout
         uses: actions/checkout@v3
