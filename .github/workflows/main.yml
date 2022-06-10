@@ -189,7 +189,7 @@ jobs:
 
   end_of_main_workflow:
     name: End of Main Workflow
-    if: github.ref != 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
     needs: [production_deploy]
