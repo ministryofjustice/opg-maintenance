@@ -168,7 +168,7 @@ jobs:
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: ${{needs.generate_environment_workspace_name.outputs.environment_workspace_name}}
-    needs: [pr_deploy]
+    needs: [pr_deploy, generate_environment_workspace_name]
     steps:
       - name: End of PR Workflow
         run: echo "${{needs.generate_environment_workspace_name.outputs.environment_workspace_name}} PR environment tested, built and deployed"
@@ -190,7 +190,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
-    needs: [production_deploy]
+    needs: [production_deploy, generate_environment_workspace_name]
     steps:
       - name: End of PR Workflow
         run: echo "production environment tested, built and deployed"
