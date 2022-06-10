@@ -169,22 +169,12 @@ jobs:
         working-directory: ./terraform/account
         continue-on-error: true
 
-      - name: Select Terraform Workspace
-        id: tf_workspace
-        run: terraform init
+      - name: Terraform Plan
+        run: |
+          terraform init -input=false
+          terraform workspace select development
+          terraform plan -lock-timeout=300s -input=false -parallelism=30
         working-directory: ./terraform/account
-
-      - name: Select Terraform Workspace
-        id: tf_workspace
-        run: terraform workspace select development
-        working-directory: ./terraform/account
-
-
-      # - name: Terraform Plan
-      #   run: |
-      #     terraform init -input=false
-      #     terraform plan -lock-timeout=300s -input=false -parallelism=30
-      #   working-directory: ./terraform/account
 
       # - name: Terraform Apply
       #   if: github.ref == 'refs/heads/main'
