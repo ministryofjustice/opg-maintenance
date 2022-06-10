@@ -136,6 +136,7 @@ jobs:
     uses: ./.github/workflows/terraform_account_workflow.yml
     with:
       workspace_name: development
+    secrets: inherit
     # runs-on: ubuntu-latest
     # environment: development
     # # steps:
