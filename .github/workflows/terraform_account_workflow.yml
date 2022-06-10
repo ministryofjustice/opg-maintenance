@@ -50,7 +50,9 @@ jobs:
       - name: Terraform Plan
         env:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
-        run: terraform plan -lock-timeout=300s -input=false -parallelism=30
+        run: /
+          terraform workspace show
+          terraform plan -lock-timeout=300s -input=false -parallelism=30
         working-directory: ./terraform/account
 
       # - name: Terraform Apply
