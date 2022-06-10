@@ -136,6 +136,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: ./.github/workflows/terraform_account_workflow
         with:
           workspace_name: development
