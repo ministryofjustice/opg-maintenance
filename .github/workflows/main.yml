@@ -25,125 +25,124 @@ defaults:
     shell: bash
 
 jobs:
-  # test_build_and_push:
-  #   name: Test, Build and Push
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: service-maintenance
-  #   steps:
-  #     - uses: actions/checkout@v3
+  test_build_and_push:
+    name: Test, Build and Push
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: service-maintenance
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Set up Go
-  #       uses: actions/setup-go@v2
-  #       with:
-  #         go-version: 1.18
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
 
-  #     - name: Build
-  #       id: build_go_app
-  #       run: go build -v ./...
+      - name: Build
+        id: build_go_app
+        run: go build -v ./...
 
-  #     - name: Test
-  #       id: test_go_app_with_coverage
-  #       run: go test -race -coverpkg ./... -covermode=atomic -coverprofile=coverage.out -v ./...
+      - name: Test
+        id: test_go_app_with_coverage
+        run: go test -race -coverpkg ./... -covermode=atomic -coverprofile=coverage.out -v ./...
 
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v3
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
 
-  #     - name: Extract branch name
-  #       id: extract_branch
-  #       run: |
-  #         if [ "$GITHUB_EVENT_NAME" == "push" ]; then
-  #           echo BRANCH_NAME=main >> $GITHUB_ENV
-  #         else
-  #           echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
-  #         fi
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          if [ "$GITHUB_EVENT_NAME" == "push" ]; then
+            echo BRANCH_NAME=main >> $GITHUB_ENV
+          else
+            echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
+          fi
 
-  #     - name: Build Image
-  #       id: build_image
-  #       run: |
-  #         docker build -t maintenance-app .
+      - name: Build Image
+        id: build_image
+        run: |
+          docker build -t maintenance-app .
 
-  #     - name: Trivy Image Vulnerability Scanner
-  #       id: trivy_scan
-  #       uses: aquasecurity/trivy-action@0.3.0
-  #       with:
-  #         image-ref: maintenance-app:latest
-  #         severity: 'HIGH,CRITICAL'
-  #         format: 'sarif'
-  #         output: 'trivy-results.sarif'
+      - name: Trivy Image Vulnerability Scanner
+        id: trivy_scan
+        uses: aquasecurity/trivy-action@0.3.0
+        with:
+          image-ref: maintenance-app:latest
+          severity: 'HIGH,CRITICAL'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
 
-  #     - name: Upload Trivy scan results to GitHub Security tab
-  #       id: trivy_upload_sarif
-  #       uses: github/codeql-action/upload-sarif@v2
-  #       if: always()
-  #       with:
-  #         sarif_file: 'trivy-results.sarif'
+      - name: Upload Trivy scan results to GitHub Security tab
+        id: trivy_upload_sarif
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
 
-  #     - name: Bump version
-  #       id: bump_version
-  #       uses: anothrNick/github-tag-action@1.36.0
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         INITIAL_VERSION: 0.0.0
-  #         DEFAULT_BUMP: minor
-  #         PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
-  #         RELEASE_BRANCHES: main
-  #         WITH_V: true
+      - name: Bump version
+        id: bump_version
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INITIAL_VERSION: 0.0.0
+          DEFAULT_BUMP: minor
+          PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
+          RELEASE_BRANCHES: main
+          WITH_V: true
 
-  #     - uses: unfor19/install-aws-cli-action@v1
+      - uses: unfor19/install-aws-cli-action@v1
 
-  #     - name: Configure AWS Credentials
+      - name: Configure AWS Credentials
 
-  #       uses: aws-actions/configure-aws-credentials@v1.6.1
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ACTIONS }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ACTIONS }}
-  #         aws-region: eu-west-1
-  #         role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
-  #         role-duration-seconds: 900
-  #         role-session-name: OPGMaintenanceECRGithubAction
+        uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ACTIONS }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ACTIONS }}
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
+          role-duration-seconds: 900
+          role-session-name: OPGMaintenanceECRGithubAction
 
-  #     - name: ECR Login
-  #       id: login_ecr
-  #       uses: aws-actions/amazon-ecr-login@v1.4.0
-  #       with:
-  #         registries: 311462405659
+      - name: ECR Login
+        id: login_ecr
+        uses: aws-actions/amazon-ecr-login@v1.4.0
+        with:
+          registries: 311462405659
 
-  #     - name: Push Container
-  #       env:
-  #         ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
-  #         MAINTENANCE_ECR_REPOSITORY: maintenance/maintenance_app
-  #       run: |
-  #         docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ steps.bump_version.outputs.tag }}
-  #         if [ $BRANCH_NAME == "main" ]; then
-  #           docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${{ steps.bump_version.outputs.tag }}
-  #           docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
-  #         fi
-  #           docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
+      - name: Push Container
+        env:
+          ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
+          MAINTENANCE_ECR_REPOSITORY: maintenance/maintenance_app
+        run: |
+          docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ steps.bump_version.outputs.tag }}
+          if [ $BRANCH_NAME == "main" ]; then
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${{ steps.bump_version.outputs.tag }}
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
+          fi
+            docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
 
-  #   outputs:
-  #     version_tag: ${{steps.bump_version.outputs.tag}}
-  # terraform_account_workflow_development:
-  #   name: Dev Account Terraform Workflow
-  #   uses: ./.github/workflows/terraform_account_workflow.yml
-  #   with:
-  #     workspace_name: development
-  #   secrets: inherit
+    outputs:
+      version_tag: ${{steps.bump_version.outputs.tag}}
+  terraform_account_workflow_development:
+    name: Dev Account Terraform Workflow
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: development
+    secrets: inherit
 
-  # terraform_account_workflow_production:
-  #   name: Prod Account Terraform Workflow
-  #   needs: terraform_account_workflow_development
-  #   uses: ./.github/workflows/terraform_account_workflow.yml
-  #   with:
-  #     workspace_name: production
-  #   secrets: inherit
+  terraform_account_workflow_production:
+    name: Prod Account Terraform Workflow
+    needs: terraform_account_workflow_development
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: production
+    secrets: inherit
 
   generate_environment_workspace_name:
-    name: generate workspace name
+    name: Generate Environment Workspace Name
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    # needs: [test_build_and_push, terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
         id: name_workspace
@@ -152,36 +151,48 @@ jobs:
     outputs:
       environment_name: ${{steps.name_workspace.outputs.name}}
 
-  end_of_workflow:
-    name: End of Workflow
+  pr_deploy:
+    name: PR Environment Deploy
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [generate_environment_workspace_name]
     environment: ${{needs.generate_environment_workspace_name.outputs.environment_name}}
-    # needs: [test_build_and_push, generate_environment_workspace_name, terraform_account_workflow_development]
+    needs: [test_build_and_push, generate_environment_workspace_name]
     steps:
-      - name: End of Workflow
+      - name: Print output from previous a job
+        id: echo_version
         run: |
-          echo "${{needs.generate_environment_workspace_name.outputs.environment_name}} environment tested, built and deployed"
+          echo "workspace: ${{needs.generate_environment_workspace_name.outputs.environment_name}}"
+          echo "version: ${{needs.test_build_and_push.outputs.version_tag}}"
 
-  # pr_deploy:
-  #   name: PR Environment Deploy
-  #   if: github.ref != 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   environment: ${{needs.generate_environment_workspace_name.outputs.environment_name}}
-  #   needs: [generate_environment_workspace_name]
-  #   # needs: [test_build_and_push, generate_environment_workspace_name, terraform_account_workflow_development]
-  #   steps:
-  #     - name: Print output from previous a job
-  #       id: echo_version
-  #       run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+  end_of_pr_workflow:
+    name: End of PR Workflow
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: ${{needs.generate_environment_workspace_name.outputs.environment_name}}
+    needs: [pr_deploy]
+    steps:
+      - name: End of PR Workflow
+        run: echo "${{needs.generate_environment_workspace_name.outputs.environment_name}} PR environment tested, built and deployed"
 
-  # production_deploy:
-  #   name: Production Deploy
-  #   if: github.ref == 'refs/heads/main'
-  #   environment: production
-  #   runs-on: ubuntu-latest
-  #   # needs: [test_build_and_push, generate_environment_workspace_name, terraform_account_workflow_production]
-  #   steps:
-  #     - name: Print output from previous a job
-  #       id: echo_version
-  #       run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+  production_deploy:
+    name: Production Deploy
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    runs-on: ubuntu-latest
+    needs: [test_build_and_push, generate_environment_workspace_name, terraform_account_workflow_production]
+    steps:
+      - name: Print output from previous a job
+        id: echo_version
+        run: |
+          echo "workspace: production"
+          echo "version: ${{needs.test_build_and_push.outputs.version_tag}}"
+
+  end_of_main_workflow:
+    name: End of Main Workflow
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [production_deploy]
+    steps:
+      - name: End of PR Workflow
+        run: echo "production environment tested, built and deployed"
