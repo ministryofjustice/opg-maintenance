@@ -44,6 +44,8 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan
+        env:
+          TF_WORKSPACE: ${{ inputs.workspace_name }}
         run: |
           terraform init -input=false
           terraform workspace select ${{ inputs.workspace_name }}
