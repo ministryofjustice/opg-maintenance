@@ -143,7 +143,7 @@ jobs:
     name: PR Environment Deploy
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: ${{ github.head_ref }})
+    environment: ${{ github.event.number }}${{ github.head_ref }}
     needs: [test_build_and_push, terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
