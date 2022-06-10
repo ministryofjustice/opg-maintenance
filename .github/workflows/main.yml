@@ -139,7 +139,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - uses: ./.github/workflows/terraform_account_workflow
+      - uses: ./.github/workflows/terraform_account_workflow.yml
         with:
           workspace_name: development
     name: "Terraform Plan/Apply"
