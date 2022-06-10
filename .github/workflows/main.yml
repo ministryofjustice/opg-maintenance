@@ -148,10 +148,10 @@ jobs:
       - name: Print output from previous a job
         id: echo_version
         run: |
-          echo "${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'  >> $GITHUB_ENV
-          echo ${{ env.ENVIRONMENT_NAME }}
+          echo "::set-output name=test::$(echo \"14UML-2337\" | tr '[:upper:]' '[:lower:]')"
     outputs:
-      environment_name:  ${{ env.ENVIRONMENT_NAME }}
+      environment_name: ${{steps.name_environment.outputs.test}}
+
   read_workspace_name:
     name: read workspace name
     runs-on: ubuntu-latest
