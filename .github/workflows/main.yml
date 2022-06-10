@@ -142,6 +142,7 @@ jobs:
   pr_deploy:
     name: Use previous output
     runs-on: ubuntu-latest
+    environment: lower(${{ github.head_ref }})
     needs: [test_build_and_push , terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
@@ -151,6 +152,7 @@ jobs:
   production_deploy:
     name: Use previous output
     if: github.ref == 'refs/heads/main'
+    environment: production
     runs-on: ubuntu-latest
     needs: [preproduction_deploy, terraform_account_workflow_production]
     steps:
