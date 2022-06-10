@@ -48,7 +48,6 @@ jobs:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
         run: |
           terraform init -input=false
-          terraform workspace select ${{ inputs.workspace_name }}
           terraform plan -lock-timeout=300s -input=false -parallelism=30
         working-directory: ./terraform/account
 
