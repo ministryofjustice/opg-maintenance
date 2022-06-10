@@ -146,13 +146,24 @@ jobs:
     # needs: [test_build_and_push, terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
-        id: echo_version
+        id: name_environment
         run: |
-          echo "${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'
-          echo${{ env.ENVIRONMENT_NAME }}
+          ::set-output name=test::$(echo "${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]')
+          echo ${{steps.name_environment.outputs.test}}
           echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
-    # outputs:
-    #   environment_name: ${{steps.bump_version.outputs.tag}}
+    outputs:
+      environment_name: ${{steps.name_environment.outputs.test}}
+
+  read_workspace_name:
+    name: read workspace name
+    runs-on: ubuntu-latest
+    needs: [generate_workspace_name]
+    # needs: [test_build_and_push, terraform_account_workflow_development]
+    steps:
+      - name: Print output from previous a job
+        id: read_environment
+        run: |
+          echo ${{needs.generate_workspace_name.outputs.environment_name}}
 
   # pr_deploy:
   #   name: PR Environment Deploy
