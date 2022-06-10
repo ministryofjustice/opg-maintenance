@@ -124,39 +124,52 @@ jobs:
 
   #   outputs:
   #     version_tag: ${{steps.bump_version.outputs.tag}}
-  terraform_account_workflow_development:
-    name: Dev Account Terraform Workflow
-    uses: ./.github/workflows/terraform_account_workflow.yml
-    with:
-      workspace_name: development
-    secrets: inherit
+  # terraform_account_workflow_development:
+  #   name: Dev Account Terraform Workflow
+  #   uses: ./.github/workflows/terraform_account_workflow.yml
+  #   with:
+  #     workspace_name: development
+  #   secrets: inherit
 
-  terraform_account_workflow_production:
-    name: Prod Account Terraform Workflow
-    needs: terraform_account_workflow_development
-    uses: ./.github/workflows/terraform_account_workflow.yml
-    with:
-      workspace_name: production
-    secrets: inherit
+  # terraform_account_workflow_production:
+  #   name: Prod Account Terraform Workflow
+  #   needs: terraform_account_workflow_development
+  #   uses: ./.github/workflows/terraform_account_workflow.yml
+  #   with:
+  #     workspace_name: production
+  #   secrets: inherit
 
-  pr_deploy:
+  generate_workspace_name:
     name: PR Environment Deploy
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: echo "${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'
     # needs: [test_build_and_push, terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
         id: echo_version
-        run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+        run: |
+          echo ENVIRONMENT_NAME="${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'  >> $GITHUB_ENV
+          echo${{ env.ENVIRONMENT_NAME }}
+          echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
 
-  production_deploy:
-    name: Production Deploy
-    if: github.ref == 'refs/heads/main'
-    environment: production
-    runs-on: ubuntu-latest
-    # needs: [test_build_and_push, terraform_account_workflow_production]
-    steps:
-      - name: Print output from previous a job
-        id: echo_version
-        run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+  # pr_deploy:
+  #   name: PR Environment Deploy
+  #   if: github.ref != 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   environment: echo "${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'
+  #   # needs: [test_build_and_push, terraform_account_workflow_development]
+  #   steps:
+  #     - name: Print output from previous a job
+  #       id: echo_version
+  #       run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+
+  # production_deploy:
+  #   name: Production Deploy
+  #   if: github.ref == 'refs/heads/main'
+  #   environment: production
+  #   runs-on: ubuntu-latest
+  #   # needs: [test_build_and_push, terraform_account_workflow_production]
+  #   steps:
+  #     - name: Print output from previous a job
+  #       id: echo_version
+  #       run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
