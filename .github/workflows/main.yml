@@ -25,7 +25,7 @@ defaults:
     shell: bash
 
 jobs:
-  build_and_push:
+  test_build_and_push:
     name: Test, Build and Push
     runs-on: ubuntu-latest
     defaults:
@@ -102,7 +102,7 @@ jobs:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
           role-duration-seconds: 900
-          role-session-name: OPGMaintenanceGithubAction
+          role-session-name: OPGMaintenanceECRGithubAction
 
       - name: ECR Login
         id: login_ecr
@@ -124,11 +124,73 @@ jobs:
 
     outputs:
       version_tag: ${{steps.bump_version.outputs.tag}}
-  # job2:
-  #   name: Use previous output
-  #   runs-on: ubuntu-latest
-  #   needs: build_and_push
-  #   steps:
-  #     - name: Print output from previous a job
-  #       id: echo_version
-  #       run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
+  terraform_account_workflow_development:
+    name: Dev Account Terraform Workflow
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: development
+    secrets: inherit
+
+  terraform_account_workflow_production:
+    name: Prod Account Terraform Workflow
+    needs: terraform_account_workflow_development
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: production
+    secrets: inherit
+
+  generate_environment_workspace_name:
+    name: Generate Environment Workspace Name
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print output from previous a job
+        id: name_workspace
+        run: |
+          echo ::set-output name=name::$(echo ${{ github.event.number }}${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
+    outputs:
+      environment_workspace_name: ${{steps.name_workspace.outputs.name}}
+
+  pr_deploy:
+    name: PR Environment Deploy
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [test_build_and_push, generate_environment_workspace_name]
+    steps:
+      - name: Print output from previous a job
+        id: echo_version
+        run: |
+          echo "workspace: ${{needs.generate_environment_workspace_name.outputs.environment_workspace_name}}"
+          echo "version: ${{needs.test_build_and_push.outputs.version_tag}}"
+
+  end_of_pr_workflow:
+    name: End of PR Workflow
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: ${{needs.generate_environment_workspace_name.outputs.environment_workspace_name}}
+    needs: [pr_deploy, generate_environment_workspace_name]
+    steps:
+      - name: End of PR Workflow
+        run: echo "${{needs.generate_environment_workspace_name.outputs.environment_workspace_name}} PR environment tested, built and deployed"
+
+  production_deploy:
+    name: Production Deploy
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [test_build_and_push, generate_environment_workspace_name, terraform_account_workflow_production]
+    steps:
+      - name: Print output from previous a job
+        id: echo_version
+        run: |
+          echo "workspace: production"
+          echo "version: ${{needs.test_build_and_push.outputs.version_tag}}"
+
+  end_of_main_workflow:
+    name: End of Main Workflow
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [production_deploy, generate_environment_workspace_name]
+    steps:
+      - name: End of PR Workflow
+        run: echo "production environment tested, built and deployed"
