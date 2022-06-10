@@ -132,18 +132,15 @@ jobs:
   #     - name: Print output from previous a job
   #       id: echo_version
   #       run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
-  terraform:
+  terraform_account_workflow_development:
+    # needs: test_build_and_push
     uses: ./.github/workflows/terraform_account_workflow.yml
     with:
       workspace_name: development
     secrets: inherit
-    # runs-on: ubuntu-latest
-    # environment: development
-    # # steps:
-    # #   - uses: actions/checkout@v2
-    # #     with:
-    # #       fetch-depth: '0'
-    # name: "Terraform Plan/Apply"
-    # # needs: test_build_and_push
-    # outputs:
-    #   tag: ${{ steps.bump_version.outputs.tag }}
+  terraform_account_workflow_production:
+    needs: terraform_account_workflow_development
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: production
+    secrets: inherit

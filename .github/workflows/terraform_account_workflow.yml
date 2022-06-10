@@ -9,6 +9,7 @@ jobs:
   terraform_account_workflow:
     name: "Terraform Account Plan/Apply"
     runs-on: ubuntu-latest
+    environment:  ${{ inputs.workspace_name }}
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}
     steps:
