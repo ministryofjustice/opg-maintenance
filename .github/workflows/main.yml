@@ -154,7 +154,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment: production
     runs-on: ubuntu-latest
-    needs: [preproduction_deploy, terraform_account_workflow_production]
+    needs: [terraform_account_workflow_production]
     steps:
       - name: Print output from previous a job
         id: echo_version
