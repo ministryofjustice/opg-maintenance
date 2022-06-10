@@ -28,6 +28,9 @@ variable "management_role" {
 provider "aws" {
   alias  = "eu_west_2"
   region = "eu-west-2"
+  default_tags {
+    tags = local.default_tags
+  }
   assume_role {
     role_arn     = "arn:aws:iam::${local.account.account_id}:role/${var.default_role}"
     session_name = "opg-maintenance-terraform-session"
@@ -37,6 +40,9 @@ provider "aws" {
 provider "aws" {
   alias  = "management"
   region = "eu-west-2"
+  default_tags {
+    tags = local.default_tags
+  }
   assume_role {
     role_arn     = "arn:aws:iam::311462405659:role/${var.management_role}"
     session_name = "opg-maintenance-terraform-session"
