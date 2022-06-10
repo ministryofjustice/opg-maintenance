@@ -134,6 +134,7 @@ jobs:
   #       run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
   terraform_account_workflow_development:
     name: Dev Account Terraform Workflow
+    if: github.ref == 'refs/heads/main'
     # needs: test_build_and_push
     uses: ./.github/workflows/terraform_account_workflow.yml
     with:

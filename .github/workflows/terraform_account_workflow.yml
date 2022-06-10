@@ -9,7 +9,6 @@ jobs:
   terraform_account_workflow:
     name: "Terraform Account Plan/Apply"
     runs-on: ubuntu-latest
-    environment:  ${{ inputs.workspace_name }}
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}
     steps:
@@ -55,9 +54,10 @@ jobs:
           terraform plan -lock-timeout=300s -input=false -parallelism=30
         working-directory: ./terraform/account
 
-      # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main'
-      #   run: |
-      #     terraform init -input=false
-      #     terraform apply -lock-timeout=300s -input=false -auto-approve -parallelism=30
-      #   working-directory: ./terraform/account
+      - name: Terraform Apply
+        env:
+          TF_WORKSPACE: ${{ inputs.workspace_name }}
+        if: github.ref == 'refs/heads/main'
+        run: |
+          terraform apply -lock-timeout=300s -input=false -auto-approve -parallelism=30
+        working-directory: ./terraform/account
