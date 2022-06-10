@@ -146,16 +146,17 @@ jobs:
     # needs: [test_build_and_push, terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
-        id: echo_version
+        id: name_workspace
         run: |
-          echo "::set-output name=test::$(echo \"14UML-2337\" | tr '[:upper:]' '[:lower:]')"
+          echo "::set-output name=name::$(echo \"14UML-2337\" | tr '[:upper:]' '[:lower:]')"
     outputs:
-      environment_name: ${{steps.name_environment.outputs.test}}
+      environment_name: ${{steps.name_workspace.outputs.name}}
 
   read_workspace_name:
     name: read workspace name
     runs-on: ubuntu-latest
     needs: [generate_workspace_name]
+    environment: ${{needs.generate_workspace_name.outputs.environment_name}}
     # needs: [test_build_and_push, terraform_account_workflow_development]
     steps:
       - name: Print output from previous a job
@@ -163,17 +164,17 @@ jobs:
         run: |
           echo ${{needs.generate_workspace_name.outputs.environment_name}}
 
-  pr_deploy:
-    name: PR Environment Deploy
-    if: github.ref != 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: ${{needs.generate_workspace_name.outputs.environment_name}}
-    needs: [generate_workspace_name]
-    # needs: [test_build_and_push, generate_workspace_name, terraform_account_workflow_development]
-    steps:
-      - name: Print output from previous a job
-        id: echo_version
-        run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+  # pr_deploy:
+  #   name: PR Environment Deploy
+  #   if: github.ref != 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   environment: ${{needs.generate_workspace_name.outputs.environment_name}}
+  #   needs: [generate_workspace_name]
+  #   # needs: [test_build_and_push, generate_workspace_name, terraform_account_workflow_development]
+  #   steps:
+  #     - name: Print output from previous a job
+  #       id: echo_version
+  #       run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
 
   # production_deploy:
   #   name: Production Deploy
