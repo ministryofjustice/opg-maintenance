@@ -25,7 +25,7 @@ defaults:
     shell: bash
 
 jobs:
-  build_and_push:
+  test_build_and_push:
     name: Test, Build and Push
     runs-on: ubuntu-latest
     defaults:
@@ -102,7 +102,7 @@ jobs:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
           role-duration-seconds: 900
-          role-session-name: OPGMaintenanceGithubAction
+          role-session-name: OPGMaintenanceECRGithubAction
 
       - name: ECR Login
         id: login_ecr
@@ -124,11 +124,26 @@ jobs:
 
     outputs:
       version_tag: ${{steps.bump_version.outputs.tag}}
-  # job2:
-  #   name: Use previous output
-  #   runs-on: ubuntu-latest
-  #   needs: build_and_push
-  #   steps:
-  #     - name: Print output from previous a job
-  #       id: echo_version
-  #       run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
+  terraform_account_workflow_development:
+    name: Dev Account Terraform Workflow
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: development
+    secrets: inherit
+
+  terraform_account_workflow_production:
+    name: Prod Account Terraform Workflow
+    needs: terraform_account_workflow_development
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: production
+    secrets: inherit
+
+  job2:
+    name: Use previous output
+    runs-on: ubuntu-latest
+    needs: [test_build_and_push , terraform_account_workflow_development]
+    steps:
+      - name: Print output from previous a job
+        id: echo_version
+        run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
