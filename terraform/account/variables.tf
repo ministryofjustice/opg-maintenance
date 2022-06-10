@@ -1,12 +1,3 @@
-variable "container_version" {
-  type    = string
-  default = "latest"
-}
-
-output "container_version" {
-  value = var.container_version
-}
-
 output "workspace_name" {
   value = terraform.workspace
 }
