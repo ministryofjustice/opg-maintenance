@@ -163,15 +163,22 @@ jobs:
           role-duration-seconds: 3600
           role-session-name: OPGMaintenanceTerraformGithubAction
 
+      - name: Lint Terraform
+        id: tf_lint
+        run: terraform fmt -check -recursive
+        working-directory: ./terraform/account
+        continue-on-error: true
+
+      - name: Select Terraform Workspace
+        id: tf_workspace
+        run: terraform init
+        working-directory: ./terraform/account
+
       - name: Select Terraform Workspace
         id: tf_workspace
         run: terraform workspace select development
         working-directory: ./terraform/account
 
-      - name: Lint Terraform
-        id: tf_lint
-        run: terraform fmt -check -recursive
-        working-directory: ./terraform/account
 
       # - name: Terraform Plan
       #   run: |
