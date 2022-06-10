@@ -148,9 +148,11 @@ jobs:
       - name: Print output from previous a job
         id: echo_version
         run: |
-          echo ENVIRONMENT_NAME="${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'  >> $GITHUB_ENV
+          echo "${{ github.event.number }}${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]'
           echo${{ env.ENVIRONMENT_NAME }}
           echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
+    # outputs:
+    #   environment_name: ${{steps.bump_version.outputs.tag}}
 
   # pr_deploy:
   #   name: PR Environment Deploy
