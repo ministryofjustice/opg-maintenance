@@ -132,7 +132,7 @@ jobs:
   #     - name: Print output from previous a job
   #       id: echo_version
   #       run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
-  terraformaccount_workflow_development:
+  terraform_account_workflow_development:
     name: Dev Account Terraform Workflow
     # needs: test_build_and_push
     uses: ./.github/workflows/terraform_account_workflow.yml
