@@ -146,4 +146,4 @@ jobs:
     steps:
       - name: Print output from previous a job
         id: echo_version
-        run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
+        run: echo "version - ${{needs.test_build_and_push.outputs.version_tag}}"
