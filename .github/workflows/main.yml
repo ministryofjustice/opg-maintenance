@@ -133,16 +133,16 @@ jobs:
   #       id: echo_version
   #       run: echo "version - ${{needs.build_and_push.outputs.version_tag}}"
   terraform:
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
-      - uses: ./.github/workflows/terraform_account_workflow.yml@UML-2337
-        with:
-          workspace_name: development
-    name: "Terraform Plan/Apply"
-    # needs: test_build_and_push
-    outputs:
-      tag: ${{ steps.bump_version.outputs.tag }}
+    uses: ./.github/workflows/terraform_account_workflow.yml
+    with:
+      workspace_name: development
+    # runs-on: ubuntu-latest
+    # environment: development
+    # # steps:
+    # #   - uses: actions/checkout@v2
+    # #     with:
+    # #       fetch-depth: '0'
+    # name: "Terraform Plan/Apply"
+    # # needs: test_build_and_push
+    # outputs:
+    #   tag: ${{ steps.bump_version.outputs.tag }}

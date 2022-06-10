@@ -12,9 +12,9 @@ jobs:
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}
     steps:
-      # - uses: actions/checkout@v2
-      #   with:
-      #     fetch-depth: '0'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - name: Extract branch name
         run: |
           if [ "${{ github.head_ref }}" == "" ]; then
