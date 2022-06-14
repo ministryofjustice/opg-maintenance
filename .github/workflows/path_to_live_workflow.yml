@@ -28,7 +28,7 @@ jobs:
 
   bump_version:
     name: Bump Tag Version
-    uses: ./.github/workflows/tag_job.yml
+    uses: ./.github/workflows/tags_job.yml
 
   docker_build_scan_push:
     name: Docker Build, Scan and Push

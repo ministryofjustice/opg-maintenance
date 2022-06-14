@@ -28,7 +28,7 @@ jobs:
 
   create_tags:
     name: Create Docker Tag and Environment Workspace Name
-    uses: ./.github/workflows/tag_job.yml
+    uses: ./.github/workflows/tags_job.yml
 
   docker_build_scan_push:
     name: Docker Build, Scan and Push
