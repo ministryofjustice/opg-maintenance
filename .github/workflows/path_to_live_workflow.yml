@@ -26,27 +26,27 @@ jobs:
     name: Go Build and Test App
     uses: ./.github/workflows/go_job.yml
 
-  bump_version:
-    name: Bump Tag Version
+  create_tags:
+    name: Create Tags
     uses: ./.github/workflows/tags_job.yml
 
   docker_build_scan_push:
     name: Docker Build, Scan and Push
     uses: ./.github/workflows/docker_job.yml
-    needs: [go_build_test,bump_version]
+    needs: [go_build_test,create_tags]
     with:
-      tag: ${{ needs.bump_version.outputs.version_tag }}"
+      tag: ${{ needs.create_tags.outputs.version_tag }}
     secrets: inherit
 
   terraform_account_workflow_development:
-    name: Dev Account Terraform Workflow
+    name: TF Plan Dev Account
     uses: ./.github/workflows/terraform_account_job.yml
     with:
       workspace_name: development
     secrets: inherit
 
   terraform_account_workflow_production:
-    name: Prod Account Terraform Workflow
+    name: TF Plan Prod Account
     needs: terraform_account_workflow_development
     uses: ./.github/workflows/terraform_account_job.yml
     with:
@@ -57,13 +57,13 @@ jobs:
     name: Production Deploy
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [docker_build_scan_push, terraform_account_workflow_production]
+    needs: [docker_build_scan_push, create_tags, terraform_account_workflow_production]
     steps:
       - name: Print output from previous a job
         id: echo_version
         run: |
           echo "workspace: production"
-          echo "version:${{ needs.create_tags.outputs.version_tag }}"
+          echo "version: ${{ needs.create_tags.outputs.version_tag }}"
 
   end_of_main_workflow:
     name: End of Main Workflow
