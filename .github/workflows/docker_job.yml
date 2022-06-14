@@ -66,4 +66,8 @@ jobs:
           MAINTENANCE_ECR_REPOSITORY: maintenance/maintenance_app
         run: |
           docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ inputs.tag }}
-          docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
+          if [ $BRANCH_NAME == "main" ]; then
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${{ inputs.tag }}
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
+          fi
+            docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY
