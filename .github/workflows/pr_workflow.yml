@@ -35,7 +35,7 @@ jobs:
     uses: ./.github/workflows/docker_job.yml
     needs: [go_build_test,create_tags]
     with:
-      tag: ${{needs.create_tags.outputs.version_tag}}"
+      tag: ${{ needs.create_tags.outputs.version_tag }}"
     secrets: inherit
 
   terraform_account_workflow_development:
@@ -62,15 +62,15 @@ jobs:
       - name: Print output from previous a job
         id: echo_version
         run: |
-          echo "workspace: ${{needs.create_tags.outputs.environment_workspace_name}}"
-          echo "version:${{needs.create_tags.outputs.version_tag}}"
+          echo "workspace: ${{ needs.create_tags.outputs.environment_workspace_name }}"
+          echo "version: ${{ needs.create_tags.outputs.version_tag }}"
 
   end_of_pr_workflow:
     name: End of PR Workflow
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: ${{needs.create_tags.outputs.environment_workspace_name}}
+    environment: ${{ needs.create_tags.outputs.environment_workspace_name }}
     needs: [pr_deploy, create_tags]
     steps:
       - name: End of PR Workflow
-        run: echo "${{needs.create_tags.outputs.environment_workspace_name}} PR environment tested, built and deployed"
+        run: echo "${{ needs.create_tags.outputs.environment_workspace_name }} PR environment tested, built and deployed"

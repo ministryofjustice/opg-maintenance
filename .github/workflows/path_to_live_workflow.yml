@@ -35,7 +35,7 @@ jobs:
     uses: ./.github/workflows/docker_job.yml
     needs: [go_build_test,bump_version]
     with:
-      tag: ${{needs.bump_version.outputs.version_tag}}"
+      tag: ${{ needs.bump_version.outputs.version_tag }}"
     secrets: inherit
 
   terraform_account_workflow_development:
@@ -63,7 +63,7 @@ jobs:
         id: echo_version
         run: |
           echo "workspace: production"
-          echo "version:${{needs.create_tags.outputs.version_tag}}"
+          echo "version:${{ needs.create_tags.outputs.version_tag }}"
 
   end_of_main_workflow:
     name: End of Main Workflow
