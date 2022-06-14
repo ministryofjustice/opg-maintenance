@@ -17,13 +17,13 @@ locals {
   account      = contains(keys(var.accounts), local.account_name) ? var.accounts[local.account_name] : var.accounts["default"]
 
   mandatory_moj_tags = {
-    business-unit = "OPG"
-    application   = "opg-maintenance"
-    account-name  = local.account_name
-    owner         = "OPG Webops: opgteam+maintenance@digital.justice.gov.uk"
-    is-production = local.account.is_production
-    runbook       = "https://github.com/ministryofjustice/opg-maintenance"
-    source-code   = "https://github.com/ministryofjustice/opg-maintenance"
+    business-unit    = "OPG"
+    application      = "opg-maintenance"
+    environment-name = local.account_name
+    owner            = "OPG Webops: opgteam+maintenance@digital.justice.gov.uk"
+    is-production    = local.account.is_production
+    runbook          = "https://github.com/ministryofjustice/opg-maintenance"
+    source-code      = "https://github.com/ministryofjustice/opg-maintenance"
   }
 
 
