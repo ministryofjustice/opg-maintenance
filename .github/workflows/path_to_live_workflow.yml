@@ -23,15 +23,15 @@ defaults:
 
 jobs:
   go_build_test:
-    name: Go Build and Test App
+    name: Main Go Build and Test App
     uses: ./.github/workflows/go_job.yml
 
   bump_version:
-    name: Bump Tag Version
+    name: Main Bump Tag Version
     uses: ./.github/workflows/tags_job.yml
 
   docker_build_scan_push:
-    name: Docker Build, Scan and Push
+    name: Main Docker Build, Scan and Push
     uses: ./.github/workflows/docker_job.yml
     needs: [go_build_test,bump_version]
     with:
@@ -39,14 +39,14 @@ jobs:
     secrets: inherit
 
   terraform_account_workflow_development:
-    name: Dev Account Terraform Workflow
+    name: Main Dev Account Terraform Workflow
     uses: ./.github/workflows/terraform_account_job.yml
     with:
       workspace_name: development
     secrets: inherit
 
   terraform_account_workflow_production:
-    name: Prod Account Terraform Workflow
+    name: Main Prod Account Terraform Workflow
     needs: terraform_account_workflow_development
     uses: ./.github/workflows/terraform_account_job.yml
     with:
@@ -54,7 +54,7 @@ jobs:
     secrets: inherit
 
   production_deploy:
-    name: Production Deploy
+    name: Main Production Deploy
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [docker_build_scan_push, terraform_account_workflow_production]
@@ -66,7 +66,7 @@ jobs:
           echo "version:${{needs.create_tags.outputs.version_tag}}"
 
   end_of_main_workflow:
-    name: End of Main Workflow
+    name: Main End of Main Workflow
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
