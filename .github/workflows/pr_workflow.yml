@@ -27,7 +27,7 @@ jobs:
     uses: ./.github/workflows/go_job.yml
 
   create_tags:
-    name: Create Docker Tag and Environment Workspace Name
+    name: Create Tags and Workspaces
     uses: ./.github/workflows/tags_job.yml
 
   docker_build_scan_push:
@@ -74,25 +74,3 @@ jobs:
     steps:
       - name: End of PR Workflow
         run: echo "${{needs.create_tags.outputs.environment_workspace_name}} PR environment tested, built and deployed"
-
-  production_deploy:
-    name: Production Deploy
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    needs: [docker_build_scan_push, terraform_account_workflow_production]
-    steps:
-      - name: Print output from previous a job
-        id: echo_version
-        run: |
-          echo "workspace: production"
-          echo "version:${{needs.create_tags.outputs.version_tag}}"
-
-  end_of_main_workflow:
-    name: End of Main Workflow
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: production
-    needs: [production_deploy]
-    steps:
-      - name: End of PR Workflow
-        run: echo "production environment tested, built and deployed"
