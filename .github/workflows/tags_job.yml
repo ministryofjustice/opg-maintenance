@@ -10,7 +10,6 @@ on:
 
 jobs:
   create_tags:
-    name: Bump Tag Version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +35,6 @@ jobs:
       docker_tag: ${{ steps.bump_version.outputs.tag }}
 
   generate_environment_workspace_name:
-    name: Generate Environment Workspace Name
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:

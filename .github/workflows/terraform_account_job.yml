@@ -7,7 +7,6 @@ on:
         type: string
 jobs:
   terraform_account_workflow:
-    name: "Terraform Account Plan/Apply"
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}

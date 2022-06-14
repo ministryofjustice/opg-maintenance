@@ -3,7 +3,6 @@ on:
 
 jobs:
   go_build_test:
-    name: Go Build and Test App
     runs-on: ubuntu-latest
     defaults:
       run:
