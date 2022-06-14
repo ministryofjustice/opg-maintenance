@@ -1,0 +1,76 @@
+name: "[Workflow] PR"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  security-events: write
+  pull-requests: read
+  actions: none
+  checks: none
+  deployments: none
+  issues: none
+  packages: none
+  repository-projects: none
+  statuses: none
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  go_build_test:
+    name: Go Build and Test App
+    uses: ./.github/workflows/go_job.yml
+
+  create_tags:
+    name: Create Tags
+    uses: ./.github/workflows/tags_job.yml
+
+  docker_build_scan_push:
+    name: Docker Build, Scan and Push
+    uses: ./.github/workflows/docker_job.yml
+    needs: [go_build_test,create_tags]
+    with:
+      tag: ${{needs.create_tags.outputs.version_tag}}"
+    secrets: inherit
+
+  terraform_account_workflow_development:
+    name: TF Plan Dev Account
+    uses: ./.github/workflows/terraform_account_job.yml
+    with:
+      workspace_name: development
+    secrets: inherit
+
+  terraform_account_workflow_production:
+    name: TF Plan Prod Account
+    needs: terraform_account_workflow_development
+    uses: ./.github/workflows/terraform_account_job.yml
+    with:
+      workspace_name: production
+    secrets: inherit
+
+  pr_deploy:
+    name: PR Environment Deploy
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [docker_build_scan_push, create_tags]
+    steps:
+      - name: Print output from previous a job
+        id: echo_version
+        run: |
+          echo "workspace: ${{needs.create_tags.outputs.environment_workspace_name}}"
+          echo "version:${{needs.create_tags.outputs.version_tag}}"
+
+  end_of_pr_workflow:
+    name: End of PR Workflow
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: ${{needs.create_tags.outputs.environment_workspace_name}}
+    needs: [pr_deploy, create_tags]
+    steps:
+      - name: End of PR Workflow
+        run: echo "${{needs.create_tags.outputs.environment_workspace_name}} PR environment tested, built and deployed"
