@@ -176,7 +176,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
-    needs: [production_deploy, generate_environment_workspace_name]
+    needs: [production_deploy]
     steps:
       - name: End of PR Workflow
         run: echo "production environment tested, built and deployed"
