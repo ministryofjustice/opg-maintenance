@@ -5,6 +5,11 @@ on:
         description: 'Tag for docker image'
         required: true
         type: string
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
   docker_build_scan_push:
     name: Docker Build, Scan and Push
