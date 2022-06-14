@@ -13,6 +13,7 @@ jobs:
     name: Bump Tag Version
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Extract branch name
         id: extract_branch
         run: |
