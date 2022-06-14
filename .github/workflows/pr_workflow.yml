@@ -29,9 +29,6 @@ jobs:
   create_tags:
     name: Create Tags
     uses: ./.github/workflows/tags_job.yml
-    outputs:
-      version_tag: ${{steps.bump_version.outputs.tag}}
-      environment_workspace_name: ${{steps.name_workspace.outputs.name}}
 
   docker_build_scan_push:
     name: Docker Build, Scan and Push

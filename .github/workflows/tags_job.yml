@@ -1,5 +1,12 @@
 on:
   workflow_call:
+    outputs:
+      version_tag:
+        description: "Docker Image Tag"
+        value: ${{steps.create_tags.outputs.docker_tag}}
+      environment_workspace_name:
+        description: "Terraform Environment Workspace Name"
+        value: ${{steps.generate_environment_workspace_name.outputs.environment_workspace_name}}
 
 jobs:
   create_tags:
@@ -24,8 +31,8 @@ jobs:
           PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
           RELEASE_BRANCHES: main
           WITH_V: true
-    # outputs:
-    #   version_tag: ${{steps.bump_version.outputs.tag}}
+    outputs:
+      docker_tag: ${{steps.bump_version.outputs.tag}}
 
   generate_environment_workspace_name:
     name: Generate Environment Workspace Name
@@ -36,5 +43,5 @@ jobs:
         id: name_workspace
         run: |
           echo ::set-output name=name::$(echo ${{ github.event.number }}${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
-    # outputs:
-    #   environment_workspace_name: ${{steps.name_workspace.outputs.name}}
+    outputs:
+      environment_workspace_name: ${{steps.name_workspace.outputs.name}}
