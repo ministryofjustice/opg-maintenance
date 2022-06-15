@@ -72,6 +72,6 @@ jobs:
     steps:
       - name: End of PR Workflow
         run: |
-          echo "${{ needs.create_tags.outputs.environment_workspace_name }} PR environment tested, built and deployed"
-          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}"
-          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}"
+          echo "${{ needs.create_tags.outputs.environment_workspace_name }} PR environment tested, built and deployed\n"
+          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}\n"
+          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}\n"
