@@ -17,7 +17,7 @@ resource "aws_kms_key" "cloudwatch" {
 }
 
 resource "aws_kms_alias" "cloudwatch_alias" {
-  name          = "alias/cloudwatch_application_logs_encryption"
+  name          = "alias/${var.application_name}_cloudwatch_application_logs_encryption_${data.aws_region.current.name}"
   target_key_id = aws_kms_key.cloudwatch.key_id
   provider      = aws.region
 }
