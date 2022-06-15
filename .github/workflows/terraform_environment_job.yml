@@ -12,6 +12,7 @@ on:
 jobs:
   terraform_environment_workflow:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.workspace_name }}
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}
     steps:
