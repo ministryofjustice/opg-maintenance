@@ -9,7 +9,7 @@ resource "aws_cloudwatch_log_group" "application" {
 }
 
 resource "aws_kms_key" "cloudwatch" {
-  description             = "${var.application_name} cloudwatch application logs encryption key"
+  description             = "${var.application_name} cloudwatch application logs encryption key for ${data.aws_region.current.name}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.cloudwatch_kms.json
