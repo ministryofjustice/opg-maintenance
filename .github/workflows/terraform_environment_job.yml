@@ -9,11 +9,19 @@ on:
         description: 'The docker image tag to deploy in the environment'
         required: true
         type: string
+    outputs:
+      terraform_output_1:
+        description: "Output 1 from terraform job"
+        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_output_1 }}
+      terraform_output_2:
+        description: "Output 2 from terraform job"
+        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_output_2 }}
 jobs:
   terraform_environment_workflow:
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.bump_version.outputs.tag }}
+      terraform_output_1: ${{ steps.terraform_outputs.outputs.output_1 }}
+      terraform_output_2: ${{ steps.terraform_outputs.outputs.output_2 }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -64,4 +72,14 @@ jobs:
           TF_VAR_container_version: ${{ inputs.version_tag }}
         run: |
           terraform apply -lock-timeout=300s -input=false -auto-approve -parallelism=30
+        working-directory: ./terraform/environment
+
+      - name: Terraform Outputs
+        id: terraform_outputs
+        env:
+          TF_WORKSPACE: ${{ inputs.workspace_name }}
+          TF_VAR_container_version: ${{ inputs.version_tag }}
+        run: |
+          echo ::set-output name=output_1::$(terraform output workspace_name)
+          echo ::set-output name=output_2::$(terraform output container_version)
         working-directory: ./terraform/environment
