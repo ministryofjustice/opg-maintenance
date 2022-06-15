@@ -22,9 +22,9 @@ defaults:
     shell: bash
 
 jobs:
-  go_build_test:
-    name: Go Build and Test App
-    uses: ./.github/workflows/go_job.yml
+  # go_build_test:
+  #   name: Go Build and Test App
+  #   uses: ./.github/workflows/go_job.yml
 
   create_tags:
     name: Create Tags
@@ -38,20 +38,20 @@ jobs:
   #     tag: ${{ needs.create_tags.outputs.version_tag }}
   #   secrets: inherit
 
-  terraform_account_workflow_development:
-    name: TF Plan Dev Account
-    uses: ./.github/workflows/terraform_account_job.yml
-    with:
-      workspace_name: development
-    secrets: inherit
+  # terraform_account_workflow_development:
+  #   name: TF Plan Dev Account
+  #   uses: ./.github/workflows/terraform_account_job.yml
+  #   with:
+  #     workspace_name: development
+  #   secrets: inherit
 
-  terraform_account_workflow_production:
-    name: TF Plan Prod Account
-    needs: terraform_account_workflow_development
-    uses: ./.github/workflows/terraform_account_job.yml
-    with:
-      workspace_name: production
-    secrets: inherit
+  # terraform_account_workflow_production:
+  #   name: TF Plan Prod Account
+  #   needs: terraform_account_workflow_development
+  #   uses: ./.github/workflows/terraform_account_job.yml
+  #   with:
+  #     workspace_name: production
+  #   secrets: inherit
 
   pr_deploy:
     name: PR Environment Deploy
