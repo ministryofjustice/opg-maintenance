@@ -67,11 +67,13 @@ jobs:
     name: End of PR Workflow
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: ${{ needs.create_tags.outputs.environment_workspace_name }}
+    environment:
+      name: ${{ needs.create_tags.outputs.environment_workspace_name }}
+      url: ""
     needs: [pr_deploy, create_tags]
     steps:
       - name: End of PR Workflow
         run: |
           echo "${{ needs.create_tags.outputs.environment_workspace_name }} PR environment tested, built and deployed\n"
-          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}\n"
-          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}\n"
+          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}"
+          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}"
