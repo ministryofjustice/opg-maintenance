@@ -11,6 +11,3 @@ variable "application_log_retention_days" {
 variable "application_name" {
   type = string
 }
-variable "account_name" {
-  type = string
-}

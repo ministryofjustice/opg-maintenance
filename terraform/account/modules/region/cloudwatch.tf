@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "application" {
-  name              = "${var.application_name}-application-logs-${data.aws_region.current.name}-${var.account_name}"
+  name              = "${var.application_name}-application-logs-${data.aws_region.current.name}"
   retention_in_days = var.application_log_retention_days
   kms_key_id        = aws_kms_key.cloudwatch.arn
   tags = {
@@ -9,7 +9,7 @@ resource "aws_cloudwatch_log_group" "application" {
 }
 
 resource "aws_kms_key" "cloudwatch" {
-  description             = "Cloudwatch application logs encryption ${var.account_name}"
+  description             = "Cloudwatch application logs encryption key"
   deletion_window_in_days = 10
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.cloudwatch_kms.json
