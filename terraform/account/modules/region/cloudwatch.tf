@@ -1,12 +1,12 @@
 resource "aws_cloudwatch_log_group" "application" {
-  name              = "${var.application_name}-application-logs-${data.aws_region.current.name}"
+  name              = "${data.aws_default_tags.current.tags.application}-application-logs-${data.aws_region.current.name}"
   retention_in_days = var.application_log_retention_days
   kms_key_id        = aws_kms_key.cloudwatch.arn
   provider          = aws.region
 }
 
 resource "aws_kms_key" "cloudwatch" {
-  description             = "${var.application_name} cloudwatch application logs encryption key for ${data.aws_region.current.name}"
+  description             = "${data.aws_default_tags.current.tags.application} cloudwatch application logs encryption key for ${data.aws_region.current.name}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.cloudwatch_kms.json
@@ -14,7 +14,7 @@ resource "aws_kms_key" "cloudwatch" {
 }
 
 resource "aws_kms_alias" "cloudwatch_alias" {
-  name          = "alias/${var.application_name}_cloudwatch_application_logs_encryption_${data.aws_region.current.name}"
+  name          = "alias/${data.aws_default_tags.current.tags.application}_cloudwatch_application_logs_encryption_${data.aws_region.current.name}"
   target_key_id = aws_kms_key.cloudwatch.key_id
   provider      = aws.region
 
