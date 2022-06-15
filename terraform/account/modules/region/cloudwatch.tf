@@ -11,18 +11,21 @@ resource "aws_kms_key" "cloudwatch" {
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.cloudwatch_kms.json
   provider                = aws.region
+  depends_on = [
+    data.aws_iam_policy_document.cloudwatch_kms
+  ]
 }
 
 resource "aws_kms_alias" "cloudwatch_alias" {
   name          = "alias/${var.application_name}_cloudwatch_application_logs_encryption_${data.aws_region.current.name}"
   target_key_id = aws_kms_key.cloudwatch.key_id
   provider      = aws.region
+
 }
 
 # See the following link for further information
 # https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html
 data "aws_iam_policy_document" "cloudwatch_kms" {
-  provider = aws.region
   statement {
     sid       = "Enable Root account permissions on Key"
     effect    = "Allow"
@@ -80,8 +83,12 @@ data "aws_iam_policy_document" "cloudwatch_kms" {
     ]
 
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/breakglass"]
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/operator",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/breakglass",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/opg-maintenance-ci",
+      ]
     }
   }
 }
