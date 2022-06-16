@@ -39,9 +39,10 @@ data "aws_iam_policy_document" "execution_role_assume_policy" {
 }
 
 resource "aws_iam_role_policy" "execution_role" {
-  name   = "${local.name_prefix}-execution-role"
-  policy = data.aws_iam_policy_document.execution_role.json
-  role   = aws_iam_role.execution_role.id
+  name     = "${local.name_prefix}-execution-role"
+  policy   = data.aws_iam_policy_document.execution_role.json
+  role     = aws_iam_role.execution_role.id
+  provider = aws.region
 }
 
 data "aws_iam_policy_document" "execution_role" {
