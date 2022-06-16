@@ -18,7 +18,11 @@ variable "environments" {
       account_name  = string
       is_production = bool
       ecs = object({
-        maintenance_service_capacity_provider = string
+        enable_fargate_spot_capacity_provider = bool
+        enable_cluster_container_insights     = bool
+      })
+      cloudwatch_log_groups = object({
+        application_log_retention_days = number
       })
     })
   )
@@ -44,4 +48,8 @@ locals {
   }
 
   default_tags = merge(local.mandatory_moj_tags, local.optional_tags)
+
+  ecs_capacity_provider      = local.environment.ecs.enable_fargate_spot_capacity_provider ? "FARGATE_SPOT" : "FARGATE"
+  cluster_container_insights = local.environment.ecs.enable_cluster_container_insights ? "enabled" : "disabled"
+
 }
