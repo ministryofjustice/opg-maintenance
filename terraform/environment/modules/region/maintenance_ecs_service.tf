@@ -14,4 +14,5 @@ resource "aws_ecs_service" "maintenance" {
   lifecycle {
     create_before_destroy = true
   }
+  provider = aws.region
 }
