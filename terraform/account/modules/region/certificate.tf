@@ -1,6 +1,18 @@
 data "aws_route53_zone" "maintenance" {
   provider = aws.management
-  name     = "maintenance.service.gov.uk"
+  name     = "maintenance.opg.service.justice.gov.uk"
+}
+
+resource "aws_acm_certificate" "certificate_maintenance" {
+  domain_name       = "${local.dev_wildcard}maintenance.opg.service.justice.gov.uk"
+  validation_method = "DNS"
+  provider          = aws.region
+}
+
+resource "aws_acm_certificate_validation" "certificate_maintenance" {
+  certificate_arn         = aws_acm_certificate.certificate_maintenance.arn
+  validation_record_fqdns = [for record in aws_route53_record.certificate_validation_maintenance : record.fqdn]
+  provider                = aws.region
 }
 
 resource "aws_route53_record" "certificate_validation_maintenance" {
@@ -19,16 +31,4 @@ resource "aws_route53_record" "certificate_validation_maintenance" {
   ttl             = 60
   type            = each.value.type
   zone_id         = data.aws_route53_zone.maintenance.zone_id
-}
-
-resource "aws_acm_certificate_validation" "certificate_maintenance" {
-  certificate_arn         = aws_acm_certificate.certificate_maintenance.arn
-  validation_record_fqdns = [for record in aws_route53_record.certificate_validation_maintenance : record.fqdn]
-  provider                = aws.region
-}
-
-resource "aws_acm_certificate" "certificate_maintenance" {
-  domain_name       = "${local.dev_wildcard}maintenance.opg.service.justice.gov.uk"
-  validation_method = "DNS"
-  provider          = aws.region
 }
