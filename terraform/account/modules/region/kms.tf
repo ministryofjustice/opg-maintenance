@@ -1,10 +1,3 @@
-resource "aws_cloudwatch_log_group" "application" {
-  name              = "${data.aws_default_tags.current.tags.application}-application-logs-${data.aws_region.current.name}"
-  retention_in_days = var.application_log_retention_days
-  kms_key_id        = aws_kms_key.cloudwatch.arn
-  provider          = aws.region
-}
-
 resource "aws_kms_key" "cloudwatch" {
   description             = "${data.aws_default_tags.current.tags.application} cloudwatch application logs encryption key for ${data.aws_region.current.name}"
   deletion_window_in_days = 10
@@ -23,6 +16,7 @@ resource "aws_kms_alias" "cloudwatch_alias" {
 # See the following link for further information
 # https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html
 data "aws_iam_policy_document" "cloudwatch_kms" {
+  provider = aws.region
   statement {
     sid       = "Allow Key to be used for Encryption"
     effect    = "Allow"
@@ -68,7 +62,6 @@ data "aws_iam_policy_document" "cloudwatch_kms" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/operator",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/breakglass",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/opg-maintenance-ci",
       ]
