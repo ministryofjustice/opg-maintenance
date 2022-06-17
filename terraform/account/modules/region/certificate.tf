@@ -1,6 +1,6 @@
-data "aws_route53_zone" "opg_service_justice_gov_uk" {
+data "aws_route53_zone" "maintenance" {
   provider = aws.management
-  name     = "opg.service.justice.gov.uk"
+  name     = "maintenance.service.gov.uk"
 }
 
 resource "aws_route53_record" "certificate_validation_maintenance" {
@@ -18,7 +18,7 @@ resource "aws_route53_record" "certificate_validation_maintenance" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.opg_service_justice_gov_uk.zone_id
+  zone_id         = data.aws_route53_zone.maintenance.zone_id
 }
 
 resource "aws_acm_certificate_validation" "certificate_maintenance" {
