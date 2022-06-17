@@ -50,13 +50,13 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "management"
+  alias  = "management_eu_west_2"
   region = "eu-west-2"
   default_tags {
     tags = local.default_tags
   }
   assume_role {
-    role_arn     = "arn:aws:iam::311462405659:role/${var.management_role}"
+    role_arn     = "arn:aws:iam::311462405659:role/${var.default_role}"
     session_name = "opg-maintenance-terraform-session"
   }
 }

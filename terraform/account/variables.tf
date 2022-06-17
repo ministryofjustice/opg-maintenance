@@ -35,4 +35,5 @@ locals {
   }
 
   default_tags = merge(local.mandatory_moj_tags, local.optional_tags)
+  dev_wildcard = local.account_name == "production" ? "" : "*."
 }
