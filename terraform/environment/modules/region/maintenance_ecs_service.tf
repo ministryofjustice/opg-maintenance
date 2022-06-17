@@ -45,7 +45,7 @@ resource "aws_security_group_rule" "maintenance_ecs_service_ingress" {
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = var.ingress_allow_list_cidr
+  cidr_blocks       = local.ingress_allow_list_cidr
   security_group_id = aws_security_group.maintenance_ecs_service.id
   lifecycle {
     create_before_destroy = true
