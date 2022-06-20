@@ -50,11 +50,7 @@ provider "aws" {
 }
 
 provider "aws" {
-<<<<<<< HEAD
   alias  = "management_eu_west_2"
-=======
-  alias  = "management"
->>>>>>> eabbcc3 (add eu-west-1 provider)
   region = "eu-west-2"
   default_tags {
     tags = local.default_tags
