@@ -19,7 +19,9 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" == "push" ]; then
             echo BRANCH_NAME=main >> $GITHUB_ENV
           else
-            echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
+            branch=${{ github.head_ref }}
+            branch=${branch//\/}
+            echo BRANCH_NAME=${branch} >> $GITHUB_ENV
           fi
       - name: Bump version
         id: bump_version
