@@ -3,7 +3,7 @@ on:
     outputs:
       version_tag:
         description: "Docker Image Tag"
-        value: ${{ jobs.create_tags.outputs.docker_tag }}
+        value: ${${{ jobs.create_tags.outputs.docker_tag }}}//[\/]/-}
       environment_workspace_name:
         description: "Terraform Environment Workspace Name"
         value: ${{ jobs.generate_environment_workspace_name.outputs.environment_workspace_name }}
@@ -19,7 +19,7 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" == "push" ]; then
             echo BRANCH_NAME=main >> $GITHUB_ENV
           else
-            echo BRANCH_NAME=${${{ github.head_ref }}//[\/]/-} >> $GITHUB_ENV
+            echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
           fi
       - name: Bump version
         id: bump_version
