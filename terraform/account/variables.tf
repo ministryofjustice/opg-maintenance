@@ -8,6 +8,9 @@ variable "accounts" {
       account_id    = string
       account_name  = string
       is_production = bool
+      cloudwatch_log_groups = object({
+        application_log_retention_days = number
+      })
     })
   )
 }
