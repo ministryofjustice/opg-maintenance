@@ -34,7 +34,7 @@ jobs:
       - name: Format Tag
         id: format_image_tag
         run: |
-          echo "::set-output name=tag::${${{ steps.format_image_tag.outputs.tag//[\/]/-}}}"
+          echo "::set-output name=tag::${${{ steps.format_image_tag.outputs.tag}}//[\/]/-}"
     outputs:
       docker_tag: ${{ steps.format_image_tag.outputs.tag}}
 
