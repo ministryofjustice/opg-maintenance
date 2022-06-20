@@ -34,7 +34,7 @@ jobs:
       - name: Format Image Tag
         id: format_image_tag
         run: |
-          echo "::set-output name=tag::$(${{ steps.bump_version.outputs.tag}} | tr / - )"
+          echo "::set-output name=tag::$(${{ steps.bump_version.outputs.tag}} | tr '/' '-' )"
     outputs:
       docker_tag: ${{ steps.format_image_tag.outputs.tag}}
 
@@ -46,6 +46,6 @@ jobs:
         id: name_workspace
         run: |
           echo ::set-output name=name::$(echo ${{ github.event.number }}${{ github.head_ref }} | tr '/' '-' | tr '[:upper:]' '[:lower:]')
-          echo ${{ steps.name_workspace.outputs.name }}
+          echo ${{ github.event.number }}${{ github.head_ref }} | tr '/' '-' | tr '[:upper:]' '[:lower:]'
     outputs:
       environment_workspace_name: ${{ steps.name_workspace.outputs.name }}
