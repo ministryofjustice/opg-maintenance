@@ -3,7 +3,7 @@ on:
     outputs:
       version_tag:
         description: "Docker Image Tag"
-        value: ${${{ jobs.create_tags.outputs.docker_tag }}}//[\/]/-}
+        value: ${{ jobs.create_tags.outputs.docker_tag }}
       environment_workspace_name:
         description: "Terraform Environment Workspace Name"
         value: ${{ jobs.generate_environment_workspace_name.outputs.environment_workspace_name }}
@@ -32,7 +32,7 @@ jobs:
           RELEASE_BRANCHES: main
           WITH_V: true
     outputs:
-      docker_tag: ${{ steps.bump_version.outputs.tag }}
+      docker_tag: ${${{ steps.bump_version.outputs.tag }}//[\/]/-}
 
   generate_environment_workspace_name:
     if: github.ref != 'refs/heads/main'
