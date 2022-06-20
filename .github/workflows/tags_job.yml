@@ -46,6 +46,8 @@ jobs:
         id: name_workspace
         run: |
           echo ::set-output name=name::$(echo ${{ github.event.number }}${{ github.head_ref }} | tr '/' '-' | tr '[:upper:]' '[:lower:]')
-          echo ${{ github.event.number }}${{ github.head_ref }} | tr '/' '-' | tr '[:upper:]' '[:lower:]'
+          branch=${{ github.event.number }}${{ github.head_ref }}
+          branch=${branch:0:3}
+          echo ${branch} | tr '/' '-' | tr '[:upper:]' '[:lower:]'
     outputs:
       environment_workspace_name: ${{ steps.name_workspace.outputs.name }}
