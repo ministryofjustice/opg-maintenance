@@ -35,18 +35,8 @@ jobs:
           PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
           RELEASE_BRANCHES: main
           WITH_V: true
-      # - name: Format Image Tag
-      #   id: format_image_tag
-      #   run: |
-      #     branch=${{ steps.bump_version.outputs.tag}}
-      #     branch=${branch//-}
-      #     branch=${branch//_}
-      #     branch=${branch//\/}
-      #     echo "::set-output name=tag::${branch}"
-      #     echo ${branch}
     outputs:
       docker_tag: ${{ steps.bump_version.outputs.tag}}
-      # docker_tag: ${{ steps.format_image_tag.outputs.tag}}
 
   generate_environment_workspace_name:
     if: github.ref != 'refs/heads/main'
