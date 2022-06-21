@@ -3,6 +3,8 @@ locals {
   ingress_allow_list_cidr = [
     "0.0.0.0/0",
   ]
+  dns_namespace_for_environment = var.account_name == "production" ? "" : "${data.aws_default_tags.current.tags.environment-name}."
+  certificate_wildcard          = var.account_name == "production" ? "" : "*."
 }
 
 variable "maintenance_service_capacity_provider" {
@@ -30,7 +32,12 @@ variable "application_log_retention_days" {
   description = "Specifies the number of days you want to retain log events in the specified log group. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, and 0. If you select 0, the events in the log group are always retained and never expire."
 }
 
-variable "vpc_id" {
+variable "account_name" {
   type        = string
-  description = "Specifies the number of days you want to retain log events in the specified log group. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, and 0. If you select 0, the events in the log group are always retained and never expire."
+  description = "Name of the target account for deployments"
+}
+
+variable "enable_deletion_protection" {
+  type        = bool
+  description = "If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer. Defaults to false."
 }
