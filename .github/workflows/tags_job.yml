@@ -19,7 +19,11 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" == "push" ]; then
             echo BRANCH_NAME=main >> $GITHUB_ENV
           else
-            echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
+            branch=${{ github.head_ref }}
+            branch=${branch//-}
+            branch=${branch//_}
+            branch=${branch//\/}
+            echo BRANCH_NAME=${branch} >> $GITHUB_ENV
           fi
       - name: Bump version
         id: bump_version
@@ -31,16 +35,33 @@ jobs:
           PRERELEASE_SUFFIX: ${{ env.BRANCH_NAME }}
           RELEASE_BRANCHES: main
           WITH_V: true
+      # - name: Format Image Tag
+      #   id: format_image_tag
+      #   run: |
+      #     branch=${{ steps.bump_version.outputs.tag}}
+      #     branch=${branch//-}
+      #     branch=${branch//_}
+      #     branch=${branch//\/}
+      #     echo "::set-output name=tag::${branch}"
+      #     echo ${branch}
     outputs:
-      docker_tag: ${{ steps.bump_version.outputs.tag }}
+      docker_tag: ${{ steps.bump_version.outputs.tag}}
+      # docker_tag: ${{ steps.format_image_tag.outputs.tag}}
 
   generate_environment_workspace_name:
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Print output from previous a job
+      - name: Output workspace name
         id: name_workspace
         run: |
-          echo ::set-output name=name::$(echo ${{ github.event.number }}${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
+          branch=${{ github.event.number }}${{ github.head_ref }}
+          branch=${branch//-}
+          branch=${branch//_}
+          branch=${branch//\/}
+          branch=${branch:0:13}
+          branch=$(echo ${branch} | tr '[:upper:]' '[:lower:]')
+          echo ::set-output name=name::${branch}
+          echo ${branch}
     outputs:
       environment_workspace_name: ${{ steps.name_workspace.outputs.name }}
