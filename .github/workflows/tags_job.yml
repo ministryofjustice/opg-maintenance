@@ -42,7 +42,7 @@ jobs:
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Output workspace name
+      - name: Generate workspace name
         id: name_workspace
         run: |
           branch=${{ github.event.number }}${{ github.head_ref }}
