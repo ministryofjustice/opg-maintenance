@@ -17,11 +17,11 @@ resource "aws_ecs_service" "maintenance" {
     assign_public_ip = false
   }
 
-  # load_balancer {
-  #   target_group_arn = aws_lb_target_group.maintenance.arn
-  #   container_name   = "app"
-  #   container_port   = 80
-  # }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.maintenance.arn
+    container_name   = "app"
+    container_port   = 80
+  }
 
   lifecycle {
     create_before_destroy = true
@@ -39,19 +39,19 @@ resource "aws_security_group" "maintenance_ecs_service" {
   provider = aws.region
 }
 
-# resource "aws_security_group_rule" "maintenance_ecs_service_ingress" {
-#   description       = "Allow Port 80 ingress from the applciation load balancer"
-#   type              = "ingress"
-#   from_port         = 80
-#   to_port           = 80
-#   protocol          = "tcp"
-#   cidr_blocks       = local.ingress_allow_list_cidr
-#   security_group_id = aws_security_group.maintenance_ecs_service.id
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-#   provider = aws.region
-# }
+resource "aws_security_group_rule" "maintenance_ecs_service_ingress" {
+  description              = "Allow Port 80 ingress from the applciation load balancer"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.maintenance_ecs_service.id
+  source_security_group_id = aws_security_group.maintenance_loadbalancer.id
+  lifecycle {
+    create_before_destroy = true
+  }
+  provider = aws.region
+}
 
 resource "aws_security_group_rule" "maintenance_ecs_service_egress" {
   description       = "Allow any egress from Use service"
