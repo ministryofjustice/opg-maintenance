@@ -36,7 +36,7 @@ jobs:
           RELEASE_BRANCHES: main
           WITH_V: true
     outputs:
-      docker_tag: ${{ steps.bump_version.outputs.tag}}
+      docker_tag: ${{ steps.bump_version.outputs.tag }}
 
   generate_environment_workspace_name:
     if: github.ref != 'refs/heads/main'
@@ -45,13 +45,13 @@ jobs:
       - name: Generate workspace name
         id: name_workspace
         run: |
-          branch=${{ github.event.number }}${{ github.head_ref }}
-          branch=${branch//-}
-          branch=${branch//_}
-          branch=${branch//\/}
-          branch=${branch:0:13}
-          branch=$(echo ${branch} | tr '[:upper:]' '[:lower:]')
-          echo ::set-output name=name::${branch}
-          echo ${branch}
+          workspace=${{ github.event.number }}${{ github.head_ref }}
+          workspace=${workspace//-}
+          workspace=${workspace//_}
+          workspace=${workspace//\/}
+          workspace=${workspace:0:13}
+          workspace=$(echo ${workspace} | tr '[:upper:]' '[:lower:]')
+          echo ::set-output name=name::${workspace}
+          echo ${workspace}
     outputs:
       environment_workspace_name: ${{ steps.name_workspace.outputs.name }}
