@@ -24,6 +24,9 @@ variable "environments" {
       cloudwatch_log_groups = object({
         application_log_retention_days = number
       })
+      application_load_balancer = object({
+        enable_deletion_protection = bool
+      })
     })
   )
 }
@@ -51,5 +54,4 @@ locals {
 
   ecs_capacity_provider      = local.environment.ecs.enable_fargate_spot_capacity_provider ? "FARGATE_SPOT" : "FARGATE"
   cluster_container_insights = local.environment.ecs.enable_cluster_container_insights ? "enabled" : "disabled"
-
 }
