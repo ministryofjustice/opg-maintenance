@@ -5,5 +5,8 @@ module "eu_west_2" {
     aws.region     = aws.eu_west_2
     aws.management = aws.management_eu_west_2
   }
+}
 
+module "allow_list" {
+  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v1.6.0"
 }
