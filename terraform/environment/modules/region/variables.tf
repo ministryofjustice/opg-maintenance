@@ -1,8 +1,5 @@
 locals {
-  name_prefix = "${data.aws_default_tags.current.tags.application}-${data.aws_default_tags.current.tags.environment-name}-${data.aws_region.current.name}"
-  ingress_allow_list_cidr = [
-    "0.0.0.0/0",
-  ]
+  name_prefix                   = "${data.aws_default_tags.current.tags.application}-${data.aws_default_tags.current.tags.environment-name}-${data.aws_region.current.name}"
   dns_namespace_for_environment = var.account_name == "production" ? "" : "${data.aws_default_tags.current.tags.environment-name}."
   certificate_wildcard          = var.account_name == "production" ? "" : "*."
 }
@@ -10,6 +7,12 @@ locals {
 variable "maintenance_service_capacity_provider" {
   type        = string
   description = "Name of the capacity provider to use. Valid values are FARGATE_SPOT and FARGATE"
+}
+
+variable "ingress_allow_list_cidr" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List of CIDR ranges permitted to access the service"
 }
 
 variable "ecs_cluster_container_insights" {
