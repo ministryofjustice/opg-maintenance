@@ -26,6 +26,7 @@ resource "aws_lb" "maintenance" {
   #   prefix  = "maintenance-${data.aws_default_tags.current.tags.environment-name}"
   #   enabled = true
   # }
+
   provider = aws.region
 }
 

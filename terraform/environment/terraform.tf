@@ -46,7 +46,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "management"
+  alias  = "management_eu_west_1"
   region = "eu-west-1"
   default_tags {
     tags = local.default_tags
