@@ -20,7 +20,3 @@ resource "aws_route53_record" "maintenance" {
     create_before_destroy = true
   }
 }
-
-output "public_facing_view_domain" {
-  value = "https://${aws_route53_record.maintenance.fqdn}"
-}

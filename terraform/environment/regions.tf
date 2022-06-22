@@ -6,9 +6,9 @@ module "eu_west_2" {
   maintenance_service_container_version = var.container_version
   application_log_retention_days        = local.environment.cloudwatch_log_groups.application_log_retention_days
   account_name                          = local.environment.account_name
-  enable_deletion_protection = local.environment.application_load_balancer.enable_deletion_protection
+  enable_deletion_protection            = local.environment.application_load_balancer.enable_deletion_protection
   providers = {
-    aws.region = aws.eu_west_2
+    aws.region     = aws.eu_west_2
     aws.management = aws.eu_west_2
   }
 }
@@ -16,4 +16,8 @@ module "eu_west_2" {
 data "aws_ecr_repository" "maintenance_app" {
   name     = "maintenance/maintenance_app"
   provider = aws.management
+}
+
+output "maintenance_url" {
+  value = "https://${module.eu_west_2.maintenance_fqdn}"
 }

@@ -10,18 +10,22 @@ on:
         required: true
         type: string
     outputs:
-      terraform_output_1:
-        description: "Output 1 from terraform job"
-        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_output_1 }}
-      terraform_output_2:
-        description: "Output 2 from terraform job"
-        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_output_2 }}
+      terraform_workspace_name:
+        description: "Name of Terraform workspace"
+        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_workspace_name }}
+      terraform_container_version:
+        description: "Container version deployed by Terraform"
+        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_container_version }}
+      terraform_maintenance_url:
+        description: "URL for the deployed maintenance service"
+        value: ${{ jobs.terraform_environment_workflow.outputs.terraform_maintenance_url }}
 jobs:
   terraform_environment_workflow:
     runs-on: ubuntu-latest
     outputs:
-      terraform_output_1: ${{ steps.terraform_outputs.outputs.output_1 }}
-      terraform_output_2: ${{ steps.terraform_outputs.outputs.output_2 }}
+      terraform_workspace_name: ${{ steps.terraform_outputs.outputs.workspace_name }}
+      terraform_container_version: ${{ steps.terraform_outputs.outputs.container_version }}
+      terraform_maintenance_url: ${{ steps.terraform_outputs.outputs.maintenance_url }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -92,6 +96,7 @@ jobs:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
           TF_VAR_container_version: ${{ inputs.version_tag }}
         run: |
-          echo ::set-output name=output_1::$(terraform output -raw workspace_name)
-          echo ::set-output name=output_2::$(terraform output -raw container_version)
+          echo ::set-output name=workspace_name::$(terraform output -raw workspace_name)
+          echo ::set-output name=container_version::$(terraform output -raw container_version)
+          echo ::set-output name=maintenance_url::$(terraform output -raw maintenance_url)
         working-directory: ./terraform/environment
