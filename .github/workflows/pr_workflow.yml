@@ -68,11 +68,12 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ needs.create_tags.outputs.environment_workspace_name }}
-      url: ""
+      url: ${{ needs.pr_deploy.outputs.terraform_maintenance_url }}"
     needs: [pr_deploy, create_tags]
     steps:
       - name: End of PR Workflow
         run: |
           echo "${{ needs.create_tags.outputs.environment_workspace_name }} PR environment tested, built and deployed"
-          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}"
-          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}"
+          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_workspace_name }}"
+          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_container_version }}"
+          echo "terraform output 3 ${{ needs.pr_deploy.outputs.terraform_maintenance_url }}"
