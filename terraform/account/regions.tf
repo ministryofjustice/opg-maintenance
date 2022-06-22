@@ -8,5 +8,5 @@ module "eu_west_2" {
 }
 
 module "allow_list" {
-  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v1.4.0"
+  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v1.6.0"
 }
