@@ -48,11 +48,8 @@ resource "aws_iam_role_policy" "execution_role" {
 
 data "aws_iam_policy_document" "execution_role" {
   statement {
-    effect = "Allow"
-    resources = [
-      var.maintenance_service_repository_arn,
-      aws_cloudwatch_log_group.application_logs.arn
-    ]
+    effect    = "Allow"
+    resources = ["*"] #tfsec:ignore:aws-iam-no-policy-wildcards
 
     actions = [
       "ecr:GetAuthorizationToken",
