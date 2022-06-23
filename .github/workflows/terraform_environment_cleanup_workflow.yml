@@ -33,7 +33,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_ALLOW_LIST_REPOSITORY }}
 
-      - name: Protect environment workspace
+      - name: Install Terraform Workspace Manager
         run: |
           wget https://github.com/TomTucka/terraform-workspace-manager/releases/download/v0.3.0/terraform-workspace-manager_Linux_x86_64.tar.gz -O $HOME/terraform-workspace-manager.tar.gz
           sudo tar -xvf $HOME/terraform-workspace-manager.tar.gz -C /usr/local/bin
