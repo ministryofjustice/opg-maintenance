@@ -10,9 +10,7 @@ if [ "$1" == "-h" ]; then
   exit 0
 fi
 
-function getWorkspaces {
-  terraform workspace list
-}
+export TF_EXIT_CODE="0"
 
 in_use_workspaces="$@"
 reserved_workspaces="default production preproduction"
@@ -29,14 +27,16 @@ do
     *)
       echo "cleaning up workspace $workspace..."
       terraform workspace select $workspace
+      terraform destroy -auto-approve
       if [ $? != 0 ]; then
         local TF_EXIT_CODE = 1
       fi
-
+        terraform workspace select default
+        terraform workspace delete $workspace
       ;;
   esac
 done
 
-if [TF_EXIT_CODE == 1]; then
+if [[ $TF_EXIT_CODE == "1" ]]; then
   exit 1
 fi
