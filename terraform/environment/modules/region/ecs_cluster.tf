@@ -50,7 +50,6 @@ data "aws_iam_policy_document" "execution_role" {
   statement {
     effect    = "Allow"
     resources = ["*"] #tfsec:ignore:aws-iam-no-policy-wildcards
-
     actions = [
       "ecr:GetAuthorizationToken",
       "ecr:BatchCheckLayerAvailability",
@@ -60,6 +59,5 @@ data "aws_iam_policy_document" "execution_role" {
       "logs:PutLogEvents",
     ]
   }
-
   provider = aws.region
 }

@@ -5,9 +5,8 @@ resource "aws_lb_target_group" "maintenance" {
   target_type          = "ip"
   vpc_id               = data.aws_vpc.main.id
   deregistration_delay = 0
-
-  depends_on = [aws_lb.maintenance]
-  provider   = aws.region
+  depends_on           = [aws_lb.maintenance]
+  provider             = aws.region
 }
 
 resource "aws_lb" "maintenance" {
@@ -17,17 +16,13 @@ resource "aws_lb" "maintenance" {
   drop_invalid_header_fields = true
   subnets                    = data.aws_subnet.public.*.id
   enable_deletion_protection = var.enable_deletion_protection
-
-  security_groups = [
-    aws_security_group.maintenance_loadbalancer.id,
-  ]
+  security_groups            = [aws_security_group.maintenance_loadbalancer.id]
 
   # access_logs {
   #   bucket  = data.aws_s3_bucket.access_log.bucket
   #   prefix  = "maintenance-${data.aws_default_tags.current.tags.environment-name}"
   #   enabled = true
   # }
-
   provider = aws.region
 }
 
@@ -59,8 +54,7 @@ resource "aws_lb_listener" "maintenance_loadbalancer" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-FS-1-2-2019-08"
-
-  certificate_arn = data.aws_acm_certificate.certificate_maintenance.arn
+  certificate_arn   = data.aws_acm_certificate.certificate_maintenance.arn
 
   default_action {
     target_group_arn = aws_lb_target_group.maintenance.arn
