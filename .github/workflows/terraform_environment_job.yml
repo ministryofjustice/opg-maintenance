@@ -76,6 +76,7 @@ jobs:
         working-directory: ./terraform/environment
 
       - name: Protect environment workspace
+        if: github.ref != 'refs/heads/main'
         env:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
           TF_VAR_container_version: ${{ inputs.version_tag }}
