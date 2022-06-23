@@ -46,4 +46,4 @@ jobs:
       - name: Destroy PR Terraform Workspaces
         working-directory: ./terraform/environment
         run: |
-          sh ../../scripts/workspace_cleanup.sh $(terraform-workspace-manager -protected-workspaces=true -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci)
+          ../../scripts/workspace_cleanup.sh $(terraform-workspace-manager -protected-workspaces=true -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci)
