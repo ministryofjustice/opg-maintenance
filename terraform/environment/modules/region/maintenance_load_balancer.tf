@@ -7,6 +7,7 @@ resource "aws_lb_target_group" "maintenance" {
   deregistration_delay = 0
 
   depends_on = [aws_lb.maintenance]
+  provider   = aws.region
 }
 
 resource "aws_lb" "maintenance" {
@@ -92,6 +93,7 @@ resource "aws_security_group_rule" "maintenance_loadbalancer_port_80_redirect_in
   protocol          = "tcp"
   cidr_blocks       = var.ingress_allow_list_cidr
   security_group_id = aws_security_group.maintenance_loadbalancer.id
+  provider          = aws.region
 }
 
 resource "aws_security_group_rule" "maintenance_loadbalancer_ingress" {
