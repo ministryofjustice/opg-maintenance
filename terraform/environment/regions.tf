@@ -3,6 +3,7 @@ module "eu_west_2" {
   ingress_allow_list_cidr               = module.allow_list.moj_sites
   maintenance_service_capacity_provider = local.ecs_capacity_provider
   maintenance_service_repository_url    = data.aws_ecr_repository.maintenance_app.repository_url
+  maintenance_service_repository_arn    = data.aws_ecr_repository.maintenance_app.arn
   maintenance_service_container_version = var.container_version
   application_log_retention_days        = local.environment.cloudwatch_log_groups.application_log_retention_days
   account_name                          = local.environment.account_name
