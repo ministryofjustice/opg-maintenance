@@ -2,7 +2,7 @@ resource "aws_ecs_cluster" "main" {
   name = local.name_prefix
   setting {
     name  = "containerInsights"
-    value = var.ecs_cluster_container_insights
+    value = true
   }
   provider = aws.region
 }

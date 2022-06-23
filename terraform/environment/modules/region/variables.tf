@@ -15,11 +15,6 @@ variable "ingress_allow_list_cidr" {
   description = "List of CIDR ranges permitted to access the service"
 }
 
-variable "ecs_cluster_container_insights" {
-  type        = string
-  description = "value for containerInsights setting on ecs cluster. Valid values are enabled and disabled"
-}
-
 variable "maintenance_service_container_version" {
   type        = string
   description = "Tag of the maintenance app container to deploy"

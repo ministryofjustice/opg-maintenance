@@ -1,7 +1,6 @@
 module "eu_west_2" {
   source                                = "./modules/region"
   ingress_allow_list_cidr               = module.allow_list.moj_sites
-  ecs_cluster_container_insights        = local.cluster_container_insights
   maintenance_service_capacity_provider = local.ecs_capacity_provider
   maintenance_service_repository_url    = data.aws_ecr_repository.maintenance_app.repository_url
   maintenance_service_container_version = var.container_version
