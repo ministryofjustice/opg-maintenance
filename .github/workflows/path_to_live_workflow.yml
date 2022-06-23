@@ -55,15 +55,12 @@ jobs:
 
   production_deploy:
     name: Production Deploy
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
     needs: [docker_build_scan_push, create_tags, terraform_account_workflow_production]
-    steps:
-      - name: Print output from previous a job
-        id: echo_version
-        run: |
-          echo "workspace: production"
-          echo "version: ${{ needs.create_tags.outputs.version_tag }}"
+    uses: ./.github/workflows/terraform_environment_job.yml
+    with:
+      workspace_name: production
+      version_tag: ${{ needs.create_tags.outputs.version_tag }}
+    secrets: inherit
 
   end_of_main_workflow:
     name: End of Main Workflow
@@ -73,4 +70,7 @@ jobs:
     needs: [production_deploy]
     steps:
       - name: End of PR Workflow
-        run: echo "production environment tested, built and deployed"
+        run: |
+          echo "production environment tested, built and deployed"
+          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}"
+          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}"
