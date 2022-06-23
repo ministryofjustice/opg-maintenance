@@ -35,3 +35,4 @@ jobs:
         with:
           working_directory: ${{ matrix.terraform_path }}
           github_token: ${{secrets.GITHUB_TOKEN}}
+          soft_fail_commenter: true
