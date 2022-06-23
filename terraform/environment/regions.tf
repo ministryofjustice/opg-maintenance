@@ -10,7 +10,7 @@ module "eu_west_2" {
   enable_deletion_protection            = local.environment.application_load_balancer.enable_deletion_protection
   providers = {
     aws.region     = aws.eu_west_2
-    aws.management = aws.eu_west_2
+    aws.management = aws.management_eu_west_2
   }
 }
 
