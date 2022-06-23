@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        terraform_path: ['terraform/account']
+        terraform_path: ['terraform/account', 'terraform/environment']
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -35,3 +35,4 @@ jobs:
         with:
           working_directory: ${{ matrix.terraform_path }}
           github_token: ${{secrets.GITHUB_TOKEN}}
+          soft_fail_commenter: true
