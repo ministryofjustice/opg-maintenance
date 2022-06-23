@@ -37,25 +37,9 @@ jobs:
           aws-region: eu-west-1
           role-duration-seconds: 3600
           role-session-name: OPGMaintenanceTerraformGithubAction
-
-      - name: Lint Terraform
-        id: tf_lint
-        run: terraform fmt -check -recursive
-        working-directory: ./terraform/environment
-        continue-on-error: true
-
-      - name: Terraform Init
-        run: terraform init -input=false
-        working-directory: ./terraform/environment
-
-      - name: Terraform Plan
-        env:
-          TF_WORKSPACE: ${{ inputs.workspace_name }}
-          TF_VAR_container_version: ${{ inputs.version_tag }}
-        run: |
-          terraform workspace show
-          terraform plan -input=false -parallelism=30
-        working-directory: ./terraform/environment
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_ALLOW_LIST_REPOSITORY }}
 
       - name: Protect environment workspace
         env:
@@ -65,23 +49,17 @@ jobs:
           wget https://github.com/TomTucka/terraform-workspace-manager/releases/download/v0.3.1/terraform-workspace-manager_Linux_x86_64.tar.gz -O $HOME/terraform-workspace-manager.tar.gz
           sudo tar -xvf $HOME/terraform-workspace-manager.tar.gz -C /usr/local/bin
           sudo chmod +x /usr/local/bin/terraform-workspace-manager
-          terraform-workspace-manager -register-workspace=$TF_WORKSPACE -time-to-protect=24 -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci
+          terraform-workspace-manager -protected-workspaces=true -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci
         working-directory: ./terraform/environment
 
-      - name: Terraform Apply
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: ./terraform/environment
+
+      - name: Destroy PR Terraform Workspaces
         env:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
           TF_VAR_container_version: ${{ inputs.version_tag }}
         run: |
-          terraform apply -lock-timeout=300s -input=false -auto-approve -parallelism=30
-        working-directory: ./terraform/environment
-
-      - name: Terraform Outputs
-        id: terraform_outputs
-        env:
-          TF_WORKSPACE: ${{ inputs.workspace_name }}
-          TF_VAR_container_version: ${{ inputs.version_tag }}
-        run: |
-          echo ::set-output name=output_1::$(terraform output -raw workspace_name)
-          echo ::set-output name=output_2::$(terraform output -raw container_version)
+          ../../scripts/workspace_cleanup.sh $(terraform-workspace-manager -protected-workspaces=true -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci)
         working-directory: ./terraform/environment
