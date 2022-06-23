@@ -1,14 +1,6 @@
 on:
   workflow_call:
-    inputs:
-      workspace_name:
-        description: 'The terraform workspace to target for environment actions'
-        required: true
-        type: string
-      version_tag:
-        description: 'The docker image tag to deploy in the environment'
-        required: true
-        type: string
+
 jobs:
   terraform_environment_cleanup:
     runs-on: ubuntu-latest
