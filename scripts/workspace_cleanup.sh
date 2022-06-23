@@ -29,7 +29,14 @@ do
     *)
       echo "cleaning up workspace $workspace..."
       terraform workspace select $workspace
+      if [ $? != 0 ]; then
+        local TF_EXIT_CODE = 1
+      fi
 
       ;;
   esac
 done
+
+if [TF_EXIT_CODE == 1]; then
+  exit 1
+fi

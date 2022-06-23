@@ -53,5 +53,5 @@ jobs:
           TF_WORKSPACE: ${{ inputs.workspace_name }}
           TF_VAR_container_version: ${{ inputs.version_tag }}
         run: |
-          ../../scripts/workspace_cleanup.sh $(terraform-workspace-manager -protected-workspaces=true -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci)
+          sh ../../scripts/workspace_cleanup.sh $(terraform-workspace-manager -protected-workspaces=true -aws-account-id=679638075911 -aws-iam-role=opg-maintenance-ci)
         working-directory: ./terraform/environment
