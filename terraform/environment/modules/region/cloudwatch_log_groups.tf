@@ -4,7 +4,7 @@ data "aws_kms_alias" "cloudwatch_application_logs_encryption" {
 }
 
 resource "aws_cloudwatch_log_group" "application_logs" {
-  name              = "${data.aws_default_tags.current.tags.environment-name}_application_logs"
+  name              = "${data.aws_default_tags.current.tags.application}_${data.aws_default_tags.current.tags.environment-name}_application_logs"
   retention_in_days = var.application_log_retention_days
   kms_key_id        = data.aws_kms_alias.cloudwatch_application_logs_encryption.target_key_arn
   provider          = aws.region
