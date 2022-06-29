@@ -6,7 +6,11 @@ resource "aws_lb_target_group" "maintenance" {
   vpc_id               = data.aws_vpc.main.id
   deregistration_delay = 0
   depends_on           = [aws_lb.maintenance]
-  provider             = aws.region
+  health_check {
+    enabled = true
+    path    = "/maintenance"
+  }
+  provider = aws.region
 }
 
 resource "aws_lb" "maintenance" {
