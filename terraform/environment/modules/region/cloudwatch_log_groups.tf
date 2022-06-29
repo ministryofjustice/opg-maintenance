@@ -18,4 +18,5 @@ fields @timestamp, message, concat(method, " ", url) as request, status
 | filter @message not like "ELB-HealthChecker"
 | sort @timestamp desc
 EOF
+  provider     = aws.region
 }
