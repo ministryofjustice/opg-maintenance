@@ -42,6 +42,11 @@ func NewServer() http.Handler {
 
 	router.Handle("/maintenance", handlers.DefaultMaintenanceHandler())
 
+	router.Handle("/en-gb/use-a-lasting-power-of-attorney", handlers.UseALPAEnglishMaintenanceHandler())
+	router.Handle("/cy/defnyddio-atwrneiaeth-arhosol", handlers.UseALPAWelshMaintenanceHandler())
+	router.Handle("/en-gb/view-a-lasting-power-of-attorney", handlers.ViewALPAEnglishMaintenanceHandler())
+	router.Handle("/cy/gweld-atwrneiaeth-arhosol", handlers.ViewALPAWelshMaintenanceHandler())
+
 	router.PathPrefix("/").Handler(handlers.StaticHandler(os.DirFS("web/static")))
 
 	wrap := WithJSONLogging(
