@@ -42,6 +42,11 @@ func NewServer() http.Handler {
 
 	router.Handle("/maintenance", handlers.DefaultMaintenanceHandler())
 
+	router.Handle("/en-gb/ual", handlers.UseALPAEnglishMaintenanceHandler())
+	router.Handle("/cy/ual", handlers.UseALPAWelshMaintenanceHandler())
+	router.Handle("/en-gb/val", handlers.ViewALPAEnglishMaintenanceHandler())
+	router.Handle("/cy/val", handlers.ViewALPAWelshMaintenanceHandler())
+
 	router.PathPrefix("/").Handler(handlers.StaticHandler(os.DirFS("web/static")))
 
 	wrap := WithJSONLogging(
