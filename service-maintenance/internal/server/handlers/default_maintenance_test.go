@@ -19,7 +19,7 @@ func TestDefaultMaintenanceHandler(t *testing.T) {
 	)
 
 	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/maintenance", nil)
-	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/maintenance", nil, "Nothing")
+	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/maintenance", nil, "Maintenance")
 }
 
 func TestDefaultMaintenanceHandler_WithBadTemplate(t *testing.T) {
