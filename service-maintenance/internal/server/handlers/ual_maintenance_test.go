@@ -17,8 +17,8 @@ func TestUseALPAEnglishMaintenanceHandler(t *testing.T) {
 		server.LoadTemplates(os.DirFS("../../../web/templates")),
 	)
 
-	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/en-gb/ual", nil)
-	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/en-gb/ual", nil, "Use a lasting power of attorney")
+	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/en-gb/use-lasting-power-of-attorney", nil)
+	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/en-gb/use-lasting-power-of-attorney", nil, "Use a lasting power of attorney")
 }
 
 func TestUseALPAWelshMaintenanceHandler(t *testing.T) {
@@ -29,8 +29,8 @@ func TestUseALPAWelshMaintenanceHandler(t *testing.T) {
 		server.LoadTemplates(os.DirFS("../../../web/templates")),
 	)
 
-	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/cy/ual", nil)
-	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/cy/ual", nil, "Defnyddio atwrneiaeth arhosol")
+	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/cy/defnyddio-atwrneiaeth-arhosol", nil)
+	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/cy/defnyddio-atwrneiaeth-arhosol", nil, "Defnyddio atwrneiaeth arhosol")
 }
 func TestViewALPAEnglishMaintenanceHandler(t *testing.T) {
 	t.Parallel()
@@ -40,8 +40,8 @@ func TestViewALPAEnglishMaintenanceHandler(t *testing.T) {
 		server.LoadTemplates(os.DirFS("../../../web/templates")),
 	)
 
-	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/en-gb/val", nil)
-	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/en-gb/val", nil, "View a lasting power of attorney")
+	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/en-gb/view-lasting-power-of-attorney", nil)
+	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/en-gb/view-lasting-power-of-attorney", nil, "View a lasting power of attorney")
 }
 func TestViewALPAWelshMaintenanceHandler(t *testing.T) {
 	t.Parallel()
@@ -51,6 +51,6 @@ func TestViewALPAWelshMaintenanceHandler(t *testing.T) {
 		server.LoadTemplates(os.DirFS("../../../web/templates")),
 	)
 
-	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/cy/val", nil)
-	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/cy/val", nil, "Gweld atwrneiaeth arhosol")
+	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/cy/gweld-atwrneiaeth-arhosol", nil)
+	assert.HTTPBodyContains(t, handler.ServeHTTP, "GET", "/cy/gweld-atwrneiaeth-arhosol", nil, "Gweld atwrneiaeth arhosol")
 }
