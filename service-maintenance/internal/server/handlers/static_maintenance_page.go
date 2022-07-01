@@ -9,7 +9,7 @@ import (
 
 func StaticMaintenanceHandler(PageTitle string, Template string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Ctx(r.Context()).Debug().Msg(fmt.Sprintf("viewed the %s maintenance page", PageTitle))
+		log.Ctx(r.Context()).Debug().Msg(fmt.Sprintf("%s maintenance page viewed", PageTitle))
 
 		templateWriterService := NewTemplateWriterService()
 		if err := templateWriterService.RenderTemplate(w, r.Context(), Template, nil); err != nil {
