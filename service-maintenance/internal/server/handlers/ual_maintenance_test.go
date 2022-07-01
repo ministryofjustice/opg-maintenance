@@ -35,7 +35,7 @@ func TestUseALPAEnglishMaintenanceHandler_WithBadTemplate(t *testing.T) {
 	fs := afero.NewIOFS(memfs)
 
 	handler := server.WithTemplates(
-		UseALPAWelshMaintenanceHandler(),
+		UseALPAEnglishMaintenanceHandler(),
 		server.LoadTemplates(fs), // bad template location loads no templates
 	)
 
