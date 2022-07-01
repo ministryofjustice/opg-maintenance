@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "cloudwatch_kms" {
     principals {
       type = "AWS"
       identifiers = [
-        data.aws_default_tags.current.tags.environment-name == "development" ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/operator" : null,
+        data.aws_default_tags.current.tags.environment-name == "development" ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/operator" : "",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/breakglass",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/opg-maintenance-ci",
       ]
