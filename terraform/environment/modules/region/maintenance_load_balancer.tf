@@ -112,7 +112,7 @@ resource "aws_security_group_rule" "maintenance_loadbalancer_production_ingress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"] #tfsec:ignore:AWS007 - open ingress for production
+  cidr_blocks       = ["0.0.0.0/0"] #tfsec:ignore:aws-vpc-no-public-ingress-sgr - open ingress for production
   security_group_id = aws_security_group.maintenance_loadbalancer.id
   provider          = aws.region
 }
