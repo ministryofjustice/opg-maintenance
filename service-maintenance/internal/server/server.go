@@ -42,10 +42,10 @@ func NewServer() http.Handler {
 
 	router.Handle("/maintenance", handlers.DefaultMaintenanceHandler())
 
-	router.Handle("/en-gb/use-a-lasting-power-of-attorney", handlers.UseALPAEnglishMaintenanceHandler())
-	router.Handle("/cy/defnyddio-atwrneiaeth-arhosol", handlers.UseALPAWelshMaintenanceHandler())
-	router.Handle("/en-gb/view-a-lasting-power-of-attorney", handlers.ViewALPAEnglishMaintenanceHandler())
-	router.Handle("/cy/gweld-atwrneiaeth-arhosol", handlers.ViewALPAWelshMaintenanceHandler())
+	router.Handle("/en-gb/use-a-lasting-power-of-attorney", handlers.StaticMaintenanceHandler("Use a LPA English", "ual_en_maintenance.page.gohtml"))
+	router.Handle("/cy/defnyddio-atwrneiaeth-arhosol", handlers.StaticMaintenanceHandler("Use a LPA Welsh", "ual_cy_maintenance.page.gohtml"))
+	router.Handle("/en-gb/view-a-lasting-power-of-attorney", handlers.StaticMaintenanceHandler("View a LPA English", "val_en_maintenance.page.gohtml"))
+	router.Handle("/cy/gweld-atwrneiaeth-arhosol", handlers.StaticMaintenanceHandler("View a LPA Welsh", "val_cy_maintenance.page.gohtml"))
 
 	router.PathPrefix("/").Handler(handlers.StaticHandler(os.DirFS("web/static")))
 
