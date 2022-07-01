@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "cloudwatch_kms_merged" {
   provider = aws.region
   source_policy_documents = [
     data.aws_iam_policy_document.cloudwatch_kms.json,
-    data.aws_iam_policy_document.cloudwatch_kms_dev_operator_admin.json
+    data.aws_iam_policy_document.cloudwatch_kms_development_account_operator_admin.json
   ]
 }
 
@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "cloudwatch_kms" {
   }
 }
 
-data "aws_iam_policy_document" "cloudwatch_kms_dev_operator_admin" {
+data "aws_iam_policy_document" "cloudwatch_kms_development_account_operator_admin" {
   provider = aws.region
   statement {
     sid       = "Dev Account Key Administrator"
