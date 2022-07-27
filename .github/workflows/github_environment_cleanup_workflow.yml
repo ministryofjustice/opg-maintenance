@@ -1,0 +1,16 @@
+on:
+  workflow_call:
+    inputs:
+      workspace_name:
+        description: 'The terraform workspace to target for environment cleanup actions'
+        required: true
+        type: string
+
+jobs:
+  github_environment_cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check for github cli
+        run: |
+          gh help
+          echo "maintenance_dev_${{ inputs.workspace_name }}"

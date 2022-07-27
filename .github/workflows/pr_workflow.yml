@@ -62,6 +62,13 @@ jobs:
       version_tag: ${{ needs.create_tags.outputs.version_tag }}
     secrets: inherit
 
+  cleanup_github_environment:
+    name: PR Environment Deploy
+    uses: ./.github/workflows/github_environment_cleanup_workflow.yml
+    with:
+      workspace_name: test
+    secrets: inherit
+
   end_of_pr_workflow:
     name: End of PR Workflow
     if: github.ref != 'refs/heads/main'
