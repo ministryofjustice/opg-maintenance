@@ -22,45 +22,61 @@ defaults:
     shell: bash
 
 jobs:
-  go_build_test:
-    name: Go Build and Test App
-    uses: ./.github/workflows/go_job.yml
+  # go_build_test:
+  #   name: Go Build and Test App
+  #   uses: ./.github/workflows/go_job.yml
 
-  create_tags:
-    name: Create Tags
-    uses: ./.github/workflows/tags_job.yml
+  # create_tags:
+  #   name: Create Tags
+  #   uses: ./.github/workflows/tags_job.yml
 
-  docker_build_scan_push:
-    name: Docker Build, Scan and Push
-    uses: ./.github/workflows/docker_job.yml
-    needs: [go_build_test,create_tags]
-    with:
-      tag: ${{ needs.create_tags.outputs.version_tag }}
-    secrets: inherit
+  # docker_build_scan_push:
+  #   name: Docker Build, Scan and Push
+  #   uses: ./.github/workflows/docker_job.yml
+  #   needs: [go_build_test,create_tags]
+  #   with:
+  #     tag: ${{ needs.create_tags.outputs.version_tag }}
+  #   secrets: inherit
 
-  terraform_account_workflow_development:
-    name: TF Plan Dev Account
-    uses: ./.github/workflows/terraform_account_job.yml
-    with:
-      workspace_name: development
-    secrets: inherit
+  # terraform_account_workflow_development:
+  #   name: TF Plan Dev Account
+  #   uses: ./.github/workflows/terraform_account_job.yml
+  #   with:
+  #     workspace_name: development
+  #   secrets: inherit
 
-  terraform_account_workflow_production:
-    name: TF Plan Prod Account
-    needs: terraform_account_workflow_development
-    uses: ./.github/workflows/terraform_account_job.yml
-    with:
-      workspace_name: production
-    secrets: inherit
+  # terraform_account_workflow_production:
+  #   name: TF Plan Prod Account
+  #   needs: terraform_account_workflow_development
+  #   uses: ./.github/workflows/terraform_account_job.yml
+  #   with:
+  #     workspace_name: production
+  #   secrets: inherit
 
-  pr_deploy:
-    name: PR Environment Deploy
-    needs: [docker_build_scan_push, create_tags]
-    uses: ./.github/workflows/terraform_environment_job.yml
-    with:
-      workspace_name: ${{ needs.create_tags.outputs.environment_workspace_name }}
-      version_tag: ${{ needs.create_tags.outputs.version_tag }}
-    secrets: inherit
+  # pr_deploy:
+  #   name: PR Environment Deploy
+  #   needs: [docker_build_scan_push, create_tags]
+  #   uses: ./.github/workflows/terraform_environment_job.yml
+  #   with:
+  #     workspace_name: ${{ needs.create_tags.outputs.environment_workspace_name }}
+  #     version_tag: ${{ needs.create_tags.outputs.version_tag }}
+  #   secrets: inherit
+
+
+  # end_of_pr_workflow:
+  #   name: End of PR Workflow
+  #   if: github.ref != 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: "maintenance_dev_${{ needs.create_tags.outputs.environment_workspace_name }}"
+  #     url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
+  #   needs: [pr_deploy, create_tags]
+  #   steps:
+  #     - name: End of PR Workflow
+  #       run: |
+  #         echo "${{ needs.pr_deploy.outputs.terraform_workspace_name }} PR environment tested, built and deployed"
+  #         echo "Tag Deployed: ${{ needs.pr_deploy.outputs.terraform_container_version }}"
+  #         echo "Environment URL: ${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
 
   cleanup_github_environment:
     name: PR Environment Deploy
@@ -68,18 +84,3 @@ jobs:
     with:
       workspace_name: test
     secrets: inherit
-
-  end_of_pr_workflow:
-    name: End of PR Workflow
-    if: github.ref != 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: "maintenance_dev_${{ needs.create_tags.outputs.environment_workspace_name }}"
-      url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
-    needs: [pr_deploy, create_tags]
-    steps:
-      - name: End of PR Workflow
-        run: |
-          echo "${{ needs.pr_deploy.outputs.terraform_workspace_name }} PR environment tested, built and deployed"
-          echo "Tag Deployed: ${{ needs.pr_deploy.outputs.terraform_container_version }}"
-          echo "Environment URL: ${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
