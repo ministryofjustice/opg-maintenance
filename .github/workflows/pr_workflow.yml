@@ -67,7 +67,7 @@ jobs:
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
-      name: "maintenance-${{ needs.create_tags.outputs.environment_workspace_name }}"
+      name: "maintenance_dev_${{ needs.create_tags.outputs.environment_workspace_name }}"
       url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
     needs: [pr_deploy, create_tags]
     steps:
