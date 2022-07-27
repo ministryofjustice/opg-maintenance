@@ -17,4 +17,10 @@ jobs:
           gh api \
           -H "Accept: application/vnd.github+json" \
           /repos/ministryofjustice/opg-maintenance/environments/maintenance_dev_37uml2507
+
+          gh api \
+            --method DELETE \
+            -H "Accept: application/vnd.github+json" \
+            /repos/ministryofjustice/opg-maintenance/environments/maintenance_dev_37uml2507
+
           echo "maintenance_dev_${{ inputs.workspace_name }}"
