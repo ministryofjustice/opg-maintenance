@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
   actions: none
   checks: none
-  deployments: none
+  deployments: write
   issues: none
   packages: none
   repository-projects: none
