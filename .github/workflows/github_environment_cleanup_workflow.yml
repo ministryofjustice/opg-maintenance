@@ -10,7 +10,9 @@ jobs:
   github_environment_cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: check for github cli
+      - name: use github cli to get environment details (not env vars)
         run: |
-          gh help
+          gh api \
+          -H "Accept: application/vnd.github+json" \
+          /repos/ministryofjustice/opg-maintenance/environments/maintenance_dev_37uml2507
           echo "maintenance_dev_${{ inputs.workspace_name }}"
