@@ -10,9 +10,9 @@ jobs:
   github_environment_cleanup:
     runs-on: ubuntu-latest
     steps:
-    #   - uses: webfactory/ssh-agent@v0.5.4
-    #     with:
-    #       ssh-private-key: ${{ secrets.OPG_MAINTENANCE_GITHUB_ENVIRONMENT_DELETION_DEPLOY_KEY_SSH_PRIVATE_KEY }}
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.OPG_MAINTENANCE_GITHUB_ENVIRONMENT_DELETION_DEPLOY_KEY_SSH_PRIVATE_KEY }}
       - name: use github cli to get environment details (not env vars)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
