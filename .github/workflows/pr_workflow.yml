@@ -6,29 +6,17 @@ on:
       - main
 
 permissions:
-  # contents: write
-  # security-events: write
-  # pull-requests: read
-  # actions: none
-  # checks: none
-  # deployments: write
-  # issues: none
-  # packages: none
-  # repository-projects: none
-  # statuses: none
-    actions: write
-    checks: write
-    contents: write
-    deployments: write
-    id-token: write
-    issues: write
-    discussions: write
-    packages: write
-    pages: write
-    pull-requests: write
-    repository-projects: write
-    security-events: write
-    statuses: write
+  contents: write
+  security-events: write
+  pull-requests: read
+  actions: none
+  checks: none
+  deployments: write
+  issues: none
+  packages: none
+  repository-projects: none
+  statuses: none
+
 defaults:
   run:
     shell: bash
