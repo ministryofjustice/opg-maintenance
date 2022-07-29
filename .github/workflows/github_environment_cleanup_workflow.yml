@@ -8,6 +8,8 @@ on:
 
 jobs:
   github_environment_cleanup:
+    permissions:
+      deployments: write
     runs-on: ubuntu-latest
     steps:
       - uses: webfactory/ssh-agent@v0.5.4
