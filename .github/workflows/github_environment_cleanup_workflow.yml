@@ -23,7 +23,7 @@ jobs:
       security-events: write
       statuses: write
     runs-on: ubuntu-latest
-    # steps:
+    steps:
     #   - uses: webfactory/ssh-agent@v0.5.4
     #     with:
     #       ssh-private-key: ${{ secrets.OPG_MAINTENANCE_GITHUB_ENVIRONMENT_DELETION_DEPLOY_KEY_SSH_PRIVATE_KEY }}
