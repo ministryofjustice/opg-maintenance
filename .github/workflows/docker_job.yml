@@ -32,7 +32,7 @@ jobs:
           docker build -t maintenance-app .
       - name: Trivy Image Vulnerability Scanner
         id: trivy_scan
-        uses: aquasecurity/trivy-action@0.6.0
+        uses: aquasecurity/trivy-action@0.6.2
         with:
           image-ref: maintenance-app:latest
           severity: 'HIGH,CRITICAL'
