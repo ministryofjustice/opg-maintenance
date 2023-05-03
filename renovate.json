@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "schedule:earlyMondays"
+  ],
+  "branchPrefix": "renovate-",
+  "commitMessageAction": "Renovate Update",
+  "labels": [
+    "Dependencies",
+    "Renovate"
+  ],
+  "prConcurrentLimit": 0,
+  "branchConcurrentLimit": 0,
+  "separateMultipleMajor": true,
+  "lockFileMaintenance": { "enabled": false },
+  "packageRules": [
+    {
+      "automerge": true,
+      "groupName": "Patch & Minor Updates",
+      "groupSlug": "all-minor-patch-updates",
+      "labels": [
+        "Dependencies",
+        "Renovate"
+      ],
+      "matchPackagePatterns": [
+        "*"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "prCreation": "immediate",
+      "prPriority": 4,
+      "stabilityDays": 3
+    }
+  ],
+  "major": {
+    "automerge": false,
+    "labels": [
+        "Dependencies",
+        "Renovate",
+        "Major"
+    ],
+    "prCreation": "not-pending",
+    "stabilityDays": 3,
+    "prPriority": 0
+  },
+  "vulnerabilityAlerts": {
+    "enabled": false
+  }
+}
