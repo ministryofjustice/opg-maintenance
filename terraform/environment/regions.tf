@@ -24,5 +24,5 @@ output "maintenance_url" {
 }
 
 module "allow_list" {
-  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v1.4.0"
+  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v2.3.0"
 }
