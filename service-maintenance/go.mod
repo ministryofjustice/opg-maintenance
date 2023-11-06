@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/gorilla/mux v1.8.0
-	github.com/ministryofjustice/opg-go-common v0.0.0-20220816144329-763497f29f90
+	github.com/ministryofjustice/opg-go-common v0.0.0-20231106092059-b3dcf8bd1eeb
 	github.com/rs/zerolog v1.22.0
 	github.com/spf13/afero v1.6.0
 	github.com/stretchr/testify v1.7.0
