@@ -6,7 +6,7 @@ COPY web/assets web/assets
 COPY webpack.config.js .
 COPY package.json package-lock.json ./
 
-RUN npm ci && node_modules/.bin/webpack -p
+RUN npm ci && node_modules/.bin/webpack --mode="production"
 
 # Build Go app
 FROM golang:1.23-alpine as build-env
