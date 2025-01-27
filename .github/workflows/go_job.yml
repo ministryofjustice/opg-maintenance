@@ -20,4 +20,4 @@ jobs:
         id: test_go_app_with_coverage
         run: go test -race -coverpkg ./... -covermode=atomic -coverprofile=coverage.out -v ./...
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
