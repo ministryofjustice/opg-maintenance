@@ -10,7 +10,7 @@
     "@babel/core": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
     "@ministryofjustice/frontend": "0.2.6",
-    "babel-loader": "^8.2.5",
+    "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^6.1.1",
     "css-loader": "^4.3.0",
     "govuk-frontend": "^3.14.0",
