@@ -17,10 +17,16 @@ module.exports = {
                         loader: MiniCssExtractPlugin.loader
                     },
                     {
-                        loader: 'css-loader?url=false'
+                        loader: 'css-loader',
+                        options: {
+                            url: false,
+                        },
                     },
                     {
-                        loader: 'sass-loader'
+                        loader: 'sass-loader',
+                        options: {
+                            api: 'legacy'
+                        },
                     }
                 ]
             },
