@@ -38,8 +38,9 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                { from: 'node_modules/govuk-frontend/govuk/assets/images', to: path.resolve(__dirname, 'web/static/assets/images') },
-                { from: 'node_modules/govuk-frontend/govuk/assets/fonts', to: path.resolve(__dirname, 'web/static/assets/fonts') },
+                { from: 'node_modules/govuk-frontend/dist/govuk/assets/images', to: path.resolve(__dirname, 'web/static/assets/images') },
+                { from: 'node_modules/govuk-frontend/dist/govuk/assets/fonts', to: path.resolve(__dirname, 'web/static/assets/fonts') },
+                { from: 'node_modules/govuk-frontend/dist/govuk/assets/rebrand', to: path.resolve(__dirname, 'web/static/assets/rebrand') },
                 { from: 'node_modules/@ministryofjustice/frontend/moj/assets/images', to: path.resolve(__dirname, 'web/static/assets/images') },
             ]
         }),
