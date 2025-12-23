@@ -6,12 +6,9 @@ import (
 	"html/template"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	. "github.com/ministryofjustice/opg-maintenance/service-maintenance/internal/server/handlers"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,13 +31,6 @@ func mockTemplate() *template.Template {
 	}
 
 	return t
-}
-
-func TestMain(m *testing.M) {
-	// nop the logger so panic and exit calls (if any) don't do anything.
-	log.Logger = zerolog.Nop()
-
-	os.Exit(m.Run())
 }
 
 func TestGetTemplate(t *testing.T) {

@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -39,6 +40,7 @@ func TestUseALPAEnglishMaintenanceHandler_WithBadTemplate(t *testing.T) {
 		server.LoadTemplates(fs), // bad template location loads no templates
 	)
 
-	// the handler panics but that is handled upstream so it claims success at this point
-	assert.HTTPSuccess(t, handler.ServeHTTP, "GET", "/en-gb/use-lasting-power-of-attorney", nil)
+	assert.Panics(t, func() {
+		handler.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest("GET", "/maintenance", nil))
+	})
 }
