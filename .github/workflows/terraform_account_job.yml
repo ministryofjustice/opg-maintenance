@@ -23,7 +23,7 @@ jobs:
           fi
         id: extract_branch
       - uses: unfor19/install-aws-cli-action@v1
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.2.2
       - name: Configure AWS Credentials For Terraform
