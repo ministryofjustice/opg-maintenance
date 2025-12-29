@@ -2,7 +2,7 @@ module github.com/ministryofjustice/opg-maintenance/service-maintenance
 
 go 1.24.3
 
-toolchain go1.24.11
+toolchain go1.25.5
 
 require (
 	github.com/gorilla/mux v1.8.1
