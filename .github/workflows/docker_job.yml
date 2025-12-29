@@ -17,7 +17,7 @@ jobs:
       run:
         working-directory: service-maintenance
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Extract branch name
         id: extract_branch
         run: |
