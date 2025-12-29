@@ -12,7 +12,7 @@ jobs:
   create_tags:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
       - name: Extract branch name
         id: extract_branch
         run: |
@@ -27,7 +27,7 @@ jobs:
           fi
       - name: Bump version
         id: bump_version
-        uses: anothrNick/github-tag-action@1.75.0
+        uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8 # 1.75.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INITIAL_VERSION: 0.0.0
