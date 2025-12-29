@@ -27,7 +27,7 @@ jobs:
       terraform_container_version: ${{ steps.terraform_outputs.outputs.container_version }}
       terraform_maintenance_url: ${{ steps.terraform_outputs.outputs.maintenance_url }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
         with:
           fetch-depth: '0'
       - name: Extract branch name
