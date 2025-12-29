@@ -27,11 +27,11 @@ jobs:
         terraform_path: ['terraform/account', 'terraform/environment']
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         with:
           fetch-depth: 2
       - name: tfsec with pr comments
-        uses: tfsec/tfsec-pr-commenter-action@v1.3.1
+        uses: tfsec/tfsec-pr-commenter-action@7a44c5dcde5dfab737363e391800629e27b6376b # v1.3.1
         with:
           working_directory: ${{ matrix.terraform_path }}
           github_token: ${{secrets.GITHUB_TOKEN}}
