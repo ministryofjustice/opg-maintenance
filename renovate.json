@@ -55,6 +55,16 @@
     "prPriority": 0
   },
   "vulnerabilityAlerts": {
-    "enabled": false
+    "groupName": "Security Alerts",
+    "labels": [
+      "Dependencies",
+      "Renovate",
+      "SecurityAlert"
+    ],
+    "dependencyDashboardApproval": false,
+    "minimumReleaseAge": null,
+    "commitMessagePrefix": "[SECURITY]",
+    "branchTopic": "{{{datasource}}}-{{{depName}}}-vulnerability",
+    "schedule": "at any time"
   }
 }
