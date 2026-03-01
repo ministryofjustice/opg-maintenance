@@ -11,7 +11,7 @@ jobs:
     outputs:
       tag: ${{ steps.bump_version.outputs.tag }}
     steps:
-      - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: '0'
       - name: Extract branch name
