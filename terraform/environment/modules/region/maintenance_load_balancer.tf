@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "maintenance" {
 
 resource "aws_lb" "maintenance" {
   name                       = "${data.aws_default_tags.current.tags.environment-name}-maintenance"
-  internal                   = false #tfsec:ignore:AWS005 - public alb
+  internal                   = false
   load_balancer_type         = "application"
   drop_invalid_header_fields = true
   subnets                    = data.aws_subnet.public.*.id
@@ -89,7 +89,7 @@ resource "aws_security_group_rule" "maintenance_loadbalancer_port_80_redirect_in
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = var.ingress_allow_list_cidr #tfsec:ignore:aws-vpc-no-public-ingress-sgr
+  cidr_blocks       = var.ingress_allow_list_cidr
   security_group_id = aws_security_group.maintenance_loadbalancer.id
   provider          = aws.region
 }
@@ -100,7 +100,7 @@ resource "aws_security_group_rule" "maintenance_loadbalancer_ingress" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = var.ingress_allow_list_cidr #tfsec:ignore:aws-vpc-no-public-ingress-sgr
+  cidr_blocks       = var.ingress_allow_list_cidr
   security_group_id = aws_security_group.maintenance_loadbalancer.id
   provider          = aws.region
 }
@@ -112,7 +112,7 @@ resource "aws_security_group_rule" "maintenance_loadbalancer_production_ingress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"] #tfsec:ignore:aws-vpc-no-public-ingress-sgr - open ingress for production
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.maintenance_loadbalancer.id
   provider          = aws.region
 }
@@ -123,7 +123,7 @@ resource "aws_security_group_rule" "maintenance_loadbalancer_egress" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"] #tfsec:ignore:AWS007 - open egress for load balancers
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.maintenance_loadbalancer.id
   provider          = aws.region
 }

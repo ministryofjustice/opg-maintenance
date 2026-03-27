@@ -1,4 +1,3 @@
-#tfsec:ignore:aws-dynamodb-enable-at-rest-encryption #tfsec:ignore:aws-dynamodb-enable-recovery #tfsec:ignore:aws-dynamodb-table-customer-key
 resource "aws_dynamodb_table" "workspace_cleanup_table" {
   count        = local.account_name == "development" ? 1 : 0
   name         = "WorkspaceCleanup"
