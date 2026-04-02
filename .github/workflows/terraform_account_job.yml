@@ -8,8 +8,6 @@ on:
 jobs:
   terraform_account_workflow:
     runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.bump_version.outputs.tag }}
     steps:
       - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
         with:
@@ -22,7 +20,6 @@ jobs:
             echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
           fi
         id: extract_branch
-      - uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c # v1
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
         with:
           terraform_version: 1.2.2
