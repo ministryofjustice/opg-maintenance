@@ -29,6 +29,8 @@ jobs:
   create_tags:
     name: Create Tags
     uses: ./.github/workflows/tags_job.yml
+    with:
+      pre_release: true
 
   docker_build_scan_push:
     name: Docker Build, Scan and Push
