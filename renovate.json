@@ -37,7 +37,7 @@
       ],
       "prCreation": "immediate",
       "prPriority": 4,
-      "minimumReleaseAge": "3 days",
+      "minimumReleaseAge": "7 days",
       "matchPackageNames": [
         "*"
       ]
@@ -51,7 +51,7 @@
       "Major"
     ],
     "prCreation": "not-pending",
-    "minimumReleaseAge": "3 days",
+    "minimumReleaseAge": "7 days",
     "prPriority": 0
   },
   "vulnerabilityAlerts": {
