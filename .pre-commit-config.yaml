@@ -2,15 +2,12 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-  - repo: https://github.com/awslabs/git-secrets
-    rev: master
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: 68e8b45440415753fff70a312ece8da92ba85b4a  # frozen: v1.5.0
     hooks:
-    - id: git-secrets
-  - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.8.4
-    hooks:
-    -   id: gitleaks
+    -   id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
