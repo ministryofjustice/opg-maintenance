@@ -5,6 +5,9 @@ on:
         description: 'Tag for docker image'
         required: true
         type: string
+    secrets:
+      SNYK_OPG_ORG_TOKEN:
+        required: true
 
 defaults:
   run:
@@ -30,21 +33,6 @@ jobs:
         id: build_image
         run: |
           docker build -t maintenance-app .
-      - name: Trivy Image Vulnerability Scanner
-        id: trivy_scan
-        uses: aquasecurity/trivy-action@97e0b3872f55f89b95b2f65b3dbab56962816478 # v0.34.2
-        with:
-          image-ref: maintenance-app:latest
-          severity: 'HIGH,CRITICAL'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-      - name: Upload Trivy scan results to GitHub Security tab
-        id: trivy_upload_sarif
-        uses: github/codeql-action/upload-sarif@45c373516f557556c15d420e3f5e0aa3d64366bc # v3
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-      - uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c # v1
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
         with:
@@ -59,6 +47,18 @@ jobs:
         uses: aws-actions/amazon-ecr-login@5a88a04c91d5c6f97aae0d9be790e64d9b1d47b7 # v1.7.1
         with:
           registries: 311462405659
+      - name: Snyk Scan
+        uses: ministryofjustice/opg-github-actions/actions/snyk-scan@9e8b7c2fb29c11e77b12913f74459fa48b11829f # v4.8.2
+        with:
+          SNYK_TEST_IMAGE: maintenance-app:latest
+          SNYK_TOKEN: ${{ secrets.SNYK_OPG_ORG_TOKEN }}
+          snyk_test_args: >
+            --severity-threshold=high
+      - name: Upload Snyk scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@e46ed2cbd01164d986452f91f178727624ae40d7 # v4.35.3
+        if: always()
+        with:
+          sarif_file: "test-results/snyk.sarif"
       - name: Push Container
         env:
           ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
