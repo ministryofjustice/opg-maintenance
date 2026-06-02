@@ -5,14 +5,18 @@ on:
         description: 'Tag for docker image'
         required: true
         type: string
-    secrets:
-      SNYK_OPG_ORG_TOKEN:
-        required: true
-    inputs:
       ecr_push_role_arn:
         description: 'IAM role ARN for ECR push via OIDC'
         required: true
         type: string
+    secrets:
+      SNYK_OPG_ORG_TOKEN:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+  security-events: write
 
 defaults:
   run:
@@ -21,10 +25,6 @@ defaults:
 jobs:
   docker_build_scan_push:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-      security-events: write
     defaults:
       run:
         working-directory: service-maintenance
