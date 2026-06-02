@@ -8,6 +8,11 @@ on:
     secrets:
       SNYK_OPG_ORG_TOKEN:
         required: true
+    inputs:
+      ecr_push_role_arn:
+        description: 'IAM role ARN for ECR push via OIDC'
+        required: true
+        type: string
 
 defaults:
   run:
@@ -16,6 +21,10 @@ defaults:
 jobs:
   docker_build_scan_push:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      security-events: write
     defaults:
       run:
         working-directory: service-maintenance
@@ -36,10 +45,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_ACTIONS }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ACTIONS }}
+          role-to-assume: ${{ inputs.ecr_push_role_arn }}
           aws-region: eu-west-1
-          role-to-assume: arn:aws:iam::311462405659:role/opg-maintenance-ci
           role-duration-seconds: 900
           role-session-name: OPGMaintenanceECRGithubAction
       - name: ECR Login

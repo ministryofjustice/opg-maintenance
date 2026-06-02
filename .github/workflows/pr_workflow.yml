@@ -38,6 +38,7 @@ jobs:
     needs: [go_build_test,create_tags]
     with:
       tag: ${{ needs.create_tags.outputs.version_tag }}
+      ecr_push_role_arn: arn:aws:iam::311462405659:role/opg-maintenance-github-actions-ecr-push
     secrets: inherit
 
   terraform_account_workflow_development:
@@ -45,6 +46,7 @@ jobs:
     uses: ./.github/workflows/terraform_account_job.yml
     with:
       workspace_name: development
+      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
     secrets: inherit
 
   terraform_account_workflow_production:
@@ -53,6 +55,7 @@ jobs:
     uses: ./.github/workflows/terraform_account_job.yml
     with:
       workspace_name: production
+      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
     secrets: inherit
 
   pr_deploy:
@@ -62,6 +65,7 @@ jobs:
     with:
       workspace_name: ${{ needs.create_tags.outputs.environment_workspace_name }}
       version_tag: ${{ needs.create_tags.outputs.version_tag }}
+      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
     secrets: inherit
 
   end_of_pr_workflow:
