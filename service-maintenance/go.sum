@@ -6,8 +6,8 @@ github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHP
 github.com/mattn/go-colorable v0.1.14/go.mod h1:6LmQG8QLFO4G5z1gPvYEzlUgJ2wF+stgPZH1UqBm1s8=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/ministryofjustice/opg-go-common v1.165.12 h1:ncW4VpIV1IxEkZMCUQ04VstufHcTB7SnYTrL8b6RRgM=
-github.com/ministryofjustice/opg-go-common v1.165.12/go.mod h1:vCZEQbcNz2EZYY1bziRqBOFizKqdGKe4f5R0IRyLXY8=
+github.com/ministryofjustice/opg-go-common v1.165.13 h1:amW87PBqx2R3+xEGqhzDBVJXM70J9k0okdcdYPKP6KA=
+github.com/ministryofjustice/opg-go-common v1.165.13/go.mod h1:vCZEQbcNz2EZYY1bziRqBOFizKqdGKe4f5R0IRyLXY8=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
