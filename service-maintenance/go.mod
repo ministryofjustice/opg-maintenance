@@ -6,7 +6,7 @@ toolchain go1.26.4
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/ministryofjustice/opg-go-common v1.165.13
+	github.com/ministryofjustice/opg-go-common v1.165.19
 	github.com/rs/zerolog v1.35.1
 	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.11.1
@@ -19,7 +19,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/xid v1.6.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
