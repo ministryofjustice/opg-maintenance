@@ -58,7 +58,7 @@ jobs:
           role-session-name: OPGMaintenanceTerraformGithubAction
 
       - id: deploy-key
-        uses: ministryofjustice/opg-github-actions/actions/github-deploy-key@77bb12e7fec3bcee9a6a35cb21361195e027a12a # v4.9.0
+        uses: ministryofjustice/opg-github-actions/actions/github-deploy-key@69c6bcc3d42e3af5234f11b3a699216ac4396bf2 # v4.10.0
         with:
           deploy_key: ${{ secrets.SSH_PRIVATE_KEY_ALLOW_LIST_REPOSITORY }}
 

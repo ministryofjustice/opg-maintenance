@@ -34,7 +34,7 @@ jobs:
           fi
       - name: generate semver tag and release
         id: semver_tag
-        uses: ministryofjustice/opg-github-actions/actions/semver@77bb12e7fec3bcee9a6a35cb21361195e027a12a # v4.9.0
+        uses: ministryofjustice/opg-github-actions/actions/semver@69c6bcc3d42e3af5234f11b3a699216ac4396bf2 # v4.10.0
         with:
           prerelease: ${{ inputs.pre_release }}
           default_bump: minor
