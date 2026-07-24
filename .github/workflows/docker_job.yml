@@ -55,14 +55,14 @@ jobs:
         with:
           registries: 311462405659
       - name: Snyk Scan
-        uses: ministryofjustice/opg-github-actions/actions/snyk-scan@77bb12e7fec3bcee9a6a35cb21361195e027a12a # v4.9.0
+        uses: ministryofjustice/opg-github-actions/actions/snyk-scan@722a5f955424aaba01e9ca43d68390cd4048d6e1 # v4.10.2
         with:
           SNYK_TEST_IMAGE: maintenance-app:latest
           SNYK_TOKEN: ${{ secrets.SNYK_OPG_ORG_TOKEN }}
           snyk_test_args: >
             --severity-threshold=high
       - name: Upload Snyk scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
+        uses: github/codeql-action/upload-sarif@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
         if: always()
         with:
           sarif_file: "test-results/snyk.sarif"
