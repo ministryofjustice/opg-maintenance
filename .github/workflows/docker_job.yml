@@ -67,7 +67,7 @@ jobs:
           TAG: ${{ inputs.tag }}
         run: |
           docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${TAG}
-          if [ $BRANCH_NAME == "main" ]; then
+          if [ ${GITHUB_REF} == 'refs/heads/main' ]; then
             docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${TAG}
             docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
           fi
