@@ -46,6 +46,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
       - name: Set workspace name
         id: set_workspace_name
@@ -100,7 +102,7 @@ jobs:
   pr_deploy:
     name: ${{ needs.workflow_variables.outputs.workspace_name }} Environment Deploy
     uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
-    needs: [docker_build_scan_push, create_tags]
+    needs: [docker_build_scan_push, create_tags, workflow_variables]
     with:
       terraform_version: ${{ needs.workflow_variables.outputs.environment_terraform_version }}
       use_ssh_private_key: true
@@ -123,7 +125,7 @@ jobs:
     environment:
       name: "maintenance_dev_${{ needs.workflow_variables.outputs.workspace_name }}"
       # url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
-    needs: [pr_deploy, create_tags]
+    needs: [pr_deploy, create_tags, workflow_variables]
     steps:
       - name: End of PR Workflow
         run: |
