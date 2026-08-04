@@ -6,8 +6,8 @@ on:
       - main
 
 permissions:
-  contents: write
-  security-events: write
+  contents: write # zizmor: ignore[excessive-permissions]
+  security-events: write # zizmor: ignore[excessive-permissions]
   pull-requests: read
   actions: none
   checks: none
@@ -16,7 +16,7 @@ permissions:
   packages: none
   repository-projects: none
   statuses: none
-  id-token: write
+  id-token: write # zizmor: ignore[excessive-permissions]
 
 defaults:
   run:
@@ -67,7 +67,8 @@ jobs:
     with:
       tag: ${{ needs.workflow_variables.outputs.semver_tag }}
       ecr_push_role_arn: arn:aws:iam::311462405659:role/opg-maintenance-github-actions-ecr-push
-    secrets: inherit
+    secrets:
+      SNYK_OPG_ORG_TOKEN: ${{ secrets.SNYK_OPG_ORG_TOKEN }}
 
   terraform_account_workflow_development:
     name: TF Development - Account

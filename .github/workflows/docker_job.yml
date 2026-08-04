@@ -30,13 +30,15 @@ jobs:
         working-directory: service-maintenance
     steps:
       - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
+        with:
+          persist-credentials: false
       - name: Extract branch name
         id: extract_branch
         run: |
           if [ "$GITHUB_EVENT_NAME" == "push" ]; then
             echo BRANCH_NAME=main >> $GITHUB_ENV
           else
-            echo BRANCH_NAME=${{ github.head_ref }} >> $GITHUB_ENV
+            echo BRANCH_NAME=${GITHUB_HEAD_REF} >> $GITHUB_ENV
           fi
       - name: Build Image
         id: build_image
@@ -70,10 +72,11 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
           MAINTENANCE_ECR_REPOSITORY: maintenance/maintenance_app
+          TAG: ${{ inputs.tag }}
         run: |
-          docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${{ inputs.tag }}
+          docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:${TAG}
           if [ $BRANCH_NAME == "main" ]; then
-            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${{ inputs.tag }}
+            docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:main-${TAG}
             docker tag maintenance-app:latest $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY:latest
           fi
             docker push --all-tags $ECR_REGISTRY/$MAINTENANCE_ECR_REPOSITORY

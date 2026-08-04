@@ -9,6 +9,8 @@ jobs:
         working-directory: service-maintenance
     steps:
       - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
+        with:
+          persist-credentials: false
       - name: Set up Go
         uses: actions/setup-go@bfdd3570ce990073878bf10f6b2d79082de49492 # v2
         with:
