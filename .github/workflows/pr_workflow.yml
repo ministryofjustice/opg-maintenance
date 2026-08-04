@@ -77,7 +77,7 @@ jobs:
   docker_build_scan_push:
     name: Docker Build, Scan and Push
     uses: ./.github/workflows/docker_job.yml
-    needs: [go_build_test,create_tags]
+    needs: [go_build_test,create_tags, workflow_variables]
     with:
       tag: ${{ needs.workflow_variables.outputs.semver_tag }}
       ecr_push_role_arn: arn:aws:iam::311462405659:role/opg-maintenance-github-actions-ecr-push
