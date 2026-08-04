@@ -33,6 +33,30 @@ jobs:
     with:
       pre_release: true
 
+
+  workflow_variables:
+    name: Output workflow variables
+    runs-on: ubuntu-latest
+    outputs:
+      # environment_terraform_version: ${{ steps.terraform_version_environment.outputs.version }}
+      account_terraform_version: ${{ steps.terraform_version_account.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      # - name: Set terraform version - environment
+      #   id: terraform_version_environment
+      #   uses: ministryofjustice/opg-github-actions/actions/terraform-version@ceeda9d30ec7f6705c819d0b7664b9a79df99a3b # v4.8.0
+      #   with:
+      #     terraform_directory: "./terraform/environment"
+      - name: Set terraform version - account
+        id: terraform_version_account
+        uses: ministryofjustice/opg-github-actions/actions/terraform-version@ceeda9d30ec7f6705c819d0b7664b9a79df99a3b # v4.8.0
+        with:
+          terraform_directory: "./terraform/account"
+
+
   docker_build_scan_push:
     name: Docker Build, Scan and Push
     uses: ./.github/workflows/docker_job.yml
@@ -42,13 +66,30 @@ jobs:
       ecr_push_role_arn: arn:aws:iam::311462405659:role/opg-maintenance-github-actions-ecr-push
     secrets: inherit
 
+
   terraform_account_workflow_development:
-    name: TF Plan Dev Account
-    uses: ./.github/workflows/terraform_account_job.yml
+    name: TF Development - Account
+    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
+    needs:
+      # - terraform_lint
+      - workflow_variables
+      # - snyk_iac_scan
     with:
-      workspace_name: development
-      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
-    secrets: inherit
+      terraform_version: ${{ needs.workflow_variables.outputs.account_terraform_version }}
+      terraform_workspace: development
+      is_ephemeral: false
+      terraform_apply: false
+      terraform_directory: ./terraform/account
+      oidc_role_to_assume: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
+
+
+  # terraform_account_workflow_development:
+  #   name: TF Plan Dev Account
+  #   uses: ./.github/workflows/terraform_account_job.yml
+  #   with:
+  #     workspace_name: development
+  #     role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
+  #   secrets: inherit
 
   pr_deploy:
     name: PR Environment Deploy
