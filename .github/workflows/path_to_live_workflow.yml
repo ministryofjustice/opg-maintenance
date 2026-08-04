@@ -6,8 +6,8 @@ on:
       - main
 
 permissions:
-  contents: write
-  security-events: write
+  contents: write # zizmor: ignore[excessive-permissions]
+  security-events: write # zizmor: ignore[excessive-permissions]
   pull-requests: read
   actions: none
   checks: none
@@ -16,7 +16,7 @@ permissions:
   packages: none
   repository-projects: none
   statuses: none
-  id-token: write
+  id-token: write # zizmor: ignore[excessive-permissions]
 
 defaults:
   run:
@@ -27,47 +27,92 @@ jobs:
     name: Go Build and Test App
     uses: ./.github/workflows/go_job.yml
 
-  create_tags:
-    name: Create Tags
-    uses: ./.github/workflows/tags_job.yml
-    with:
-      pre_release: false
+  workflow_variables:
+    name: Output workflow variables
+    runs-on: ubuntu-latest
+    outputs:
+      semver_tag: ${{ steps.semver_tag.outputs.tag }}
+      environment_terraform_version: ${{ steps.terraform_version_environment.outputs.version }}
+      account_terraform_version: ${{ steps.terraform_version_account.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+      - name: Set terraform version - environment
+        id: terraform_version_environment
+        uses: ministryofjustice/opg-github-actions/actions/terraform-version@ceeda9d30ec7f6705c819d0b7664b9a79df99a3b # v4.8.0
+        with:
+          terraform_directory: "./terraform/environment"
+      - name: Set terraform version - account
+        id: terraform_version_account
+        uses: ministryofjustice/opg-github-actions/actions/terraform-version@ceeda9d30ec7f6705c819d0b7664b9a79df99a3b # v4.8.0
+        with:
+          terraform_directory: "./terraform/account"
+      - name: Bump version and push tag
+        uses: ministryofjustice/opg-github-actions/actions/semver@ceeda9d30ec7f6705c819d0b7664b9a79df99a3b # v4.8.0
+        id: semver_tag
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          create_release: true
+          default_bump: minor
 
   docker_build_scan_push:
     name: Docker Build, Scan and Push
     uses: ./.github/workflows/docker_job.yml
-    needs: [go_build_test,create_tags]
+    needs: [go_build_test,workflow_variables]
     with:
-      tag: ${{ needs.create_tags.outputs.version_tag }}
+      tag: ${{ needs.workflow_variables.outputs.semver_tag }}
       ecr_push_role_arn: arn:aws:iam::311462405659:role/opg-maintenance-github-actions-ecr-push
-    secrets: inherit
+    secrets:
+      SNYK_OPG_ORG_TOKEN: ${{ secrets.SNYK_OPG_ORG_TOKEN }}
 
   terraform_account_workflow_development:
-    name: TF Plan Dev Account
-    uses: ./.github/workflows/terraform_account_job.yml
+    name: TF Development - Account
+    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
+    needs:
+      - workflow_variables
     with:
-      workspace_name: development
-      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-production
-    secrets: inherit
+      terraform_version: ${{ needs.workflow_variables.outputs.account_terraform_version }}
+      terraform_workspace: development
+      is_ephemeral: false
+      terraform_apply: true
+      terraform_directory: ./terraform/account
+      oidc_role_to_assume: arn:aws:iam::631181914621:role/oidc-opg-maintenance-development
 
   terraform_account_workflow_production:
-    name: TF Plan Prod Account
-    needs: terraform_account_workflow_development
-    uses: ./.github/workflows/terraform_account_job.yml
+    name: TF Production - Account
+    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
+    needs:
+      - workflow_variables
+      - terraform_account_workflow_development
     with:
-      workspace_name: production
-      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-production
-    secrets: inherit
+      terraform_version: ${{ needs.workflow_variables.outputs.account_terraform_version }}
+      terraform_workspace: production
+      is_ephemeral: false
+      terraform_apply: true
+      terraform_directory: ./terraform/account
+      oidc_role_to_assume: arn:aws:iam::631181914621:role/oidc-opg-maintenance-production
 
   production_deploy:
-    name: Production Deploy
-    needs: [docker_build_scan_push, create_tags, terraform_account_workflow_production]
-    uses: ./.github/workflows/terraform_environment_job.yml
+    name: Production Environment Deploy
+    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
+    needs: [docker_build_scan_push, workflow_variables, terraform_account_workflow_production]
     with:
-      workspace_name: production
-      version_tag: ${{ needs.create_tags.outputs.version_tag }}
-      role_arn: arn:aws:iam::631181914621:role/oidc-opg-maintenance-production
-    secrets: inherit
+      terraform_version: ${{ needs.workflow_variables.outputs.environment_terraform_version }}
+      use_ssh_private_key: true
+      terraform_workspace: production
+      is_ephemeral: false
+      terraform_apply: true
+      terraform_directory: ./terraform/environment
+      terraform_variables: "-var container_version=${{ needs.workflow_variables.outputs.semver_tag }}"
+      persist_artifacts: false
+      oidc_role_to_assume: arn:aws:iam::631181914621:role/oidc-opg-maintenance-production
+    secrets:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_ALLOW_LIST_REPOSITORY }}
 
   end_of_main_workflow:
     name: End of Main Workflow
@@ -79,5 +124,3 @@ jobs:
       - name: End of PR Workflow
         run: |
           echo "production environment tested, built and deployed"
-          echo "terraform output 1 ${{ needs.pr_deploy.outputs.terraform_output_1 }}"
-          echo "terraform output 2 ${{ needs.pr_deploy.outputs.terraform_output_2 }}"
