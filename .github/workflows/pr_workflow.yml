@@ -81,9 +81,7 @@ jobs:
     name: TF Development - Account
     uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
     needs:
-      # - terraform_lint
       - workflow_variables
-      # - snyk_iac_scan
     with:
       terraform_version: ${{ needs.workflow_variables.outputs.account_terraform_version }}
       terraform_workspace: development
