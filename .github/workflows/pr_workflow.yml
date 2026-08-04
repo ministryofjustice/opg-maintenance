@@ -27,13 +27,6 @@ jobs:
     name: Go Build and Test App
     uses: ./.github/workflows/go_job.yml
 
-  create_tags:
-    name: Create Tags
-    uses: ./.github/workflows/tags_job.yml
-    with:
-      pre_release: true
-
-
   workflow_variables:
     name: Output workflow variables
     runs-on: ubuntu-latest
@@ -77,7 +70,7 @@ jobs:
   docker_build_scan_push:
     name: Docker Build, Scan and Push
     uses: ./.github/workflows/docker_job.yml
-    needs: [go_build_test,create_tags, workflow_variables]
+    needs: [go_build_test, workflow_variables]
     with:
       tag: ${{ needs.workflow_variables.outputs.semver_tag }}
       ecr_push_role_arn: arn:aws:iam::311462405659:role/opg-maintenance-github-actions-ecr-push
@@ -102,7 +95,7 @@ jobs:
   pr_deploy:
     name: ${{ needs.workflow_variables.outputs.workspace_name }} Environment Deploy
     uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@f567efb2782f73a972073276a00bc4bcf92a3728 # v3.19.2
-    needs: [docker_build_scan_push, create_tags, workflow_variables]
+    needs: [docker_build_scan_push, workflow_variables]
     with:
       terraform_version: ${{ needs.workflow_variables.outputs.environment_terraform_version }}
       use_ssh_private_key: true
@@ -125,7 +118,7 @@ jobs:
     environment:
       name: "maintenance_dev_${{ needs.workflow_variables.outputs.workspace_name }}"
       # url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
-    needs: [pr_deploy, create_tags, workflow_variables]
+    needs: [pr_deploy, workflow_variables]
     steps:
       - name: End of PR Workflow
         run: |
