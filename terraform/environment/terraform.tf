@@ -7,13 +7,6 @@ terraform {
     role_arn       = "arn:aws:iam::311462405659:role/opg-maintenance-ci"
     dynamodb_table = "remote_lock"
   }
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.100.0"
-    }
-  }
-  required_version = ">= 1.2.2"
 }
 
 variable "default_role" {
