@@ -37,7 +37,7 @@ jobs:
         run: |
           docker build -t maintenance-app .
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           role-to-assume: ${{ inputs.ecr_push_role_arn }}
           aws-region: eu-west-1
@@ -45,7 +45,7 @@ jobs:
           role-session-name: OPGMaintenanceECRGithubAction
       - name: ECR Login
         id: login_ecr
-        uses: aws-actions/amazon-ecr-login@5a88a04c91d5c6f97aae0d9be790e64d9b1d47b7 # v1.7.1
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2.0.1
         with:
           registries: 311462405659
       - name: Snyk Scan
