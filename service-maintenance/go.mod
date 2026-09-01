@@ -2,11 +2,11 @@ module github.com/ministryofjustice/opg-maintenance/service-maintenance
 
 go 1.25.0
 
-toolchain go1.26.5
+toolchain go1.27.0
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/ministryofjustice/opg-go-common v1.165.22
+	github.com/ministryofjustice/opg-go-common v1.165.25
 	github.com/rs/zerolog v1.35.1
 	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.11.1
