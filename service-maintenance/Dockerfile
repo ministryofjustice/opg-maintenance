@@ -9,7 +9,7 @@ COPY package.json package-lock.json ./
 RUN npm ci && node_modules/.bin/webpack --mode="production"
 
 # Build Go app
-FROM golang:1.26-alpine@sha256:d4c4845f5d60c6a974c6000ce58ae079328d03ab7f721a0734277e69905473e5 AS build-env
+FROM golang:1.26-alpine@sha256:27abaaead7814717e9ea7d7cd5fd070a49c07c57052ce6495505ccf36a5f35b2 AS build-env
 
 WORKDIR /app
 
