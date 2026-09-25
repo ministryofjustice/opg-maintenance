@@ -11,6 +11,16 @@ variable "accounts" {
       cloudwatch_log_groups = object({
         application_log_retention_days = number
       })
+      network_firewall = object({
+        enabled                  = bool
+        allowed_domains          = list(string)
+        allowed_prefixed_domains = list(string)
+        shared_firewall_configuration = object({
+          enabled      = bool
+          account_id   = string
+          account_name = string
+        })
+      })
     })
   )
 }

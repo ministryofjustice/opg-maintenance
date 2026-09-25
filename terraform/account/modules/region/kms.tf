@@ -1,5 +1,5 @@
 resource "aws_kms_key" "cloudwatch" {
-  description             = "${data.aws_default_tags.current.tags.application} cloudwatch application logs encryption key for ${data.aws_region.current.name}"
+  description             = "${data.aws_default_tags.current.tags.application} cloudwatch application logs encryption key for ${data.aws_region.current.region}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
   policy                  = data.aws_default_tags.current.tags.environment-name == "development" ? data.aws_iam_policy_document.cloudwatch_kms_merged.json : data.aws_iam_policy_document.cloudwatch_kms.json
@@ -7,7 +7,7 @@ resource "aws_kms_key" "cloudwatch" {
 }
 
 resource "aws_kms_alias" "cloudwatch_alias" {
-  name          = "alias/${data.aws_default_tags.current.tags.application}_cloudwatch_application_logs_encryption_${data.aws_region.current.name}"
+  name          = "alias/${data.aws_default_tags.current.tags.application}_cloudwatch_application_logs_encryption_${data.aws_region.current.region}"
   target_key_id = aws_kms_key.cloudwatch.key_id
   provider      = aws.region
 
@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "cloudwatch_kms" {
     principals {
       type = "Service"
       identifiers = [
-        "logs.${data.aws_region.current.name}.amazonaws.com",
+        "logs.${data.aws_region.current.region}.amazonaws.com",
         "events.amazonaws.com"
       ]
     }
