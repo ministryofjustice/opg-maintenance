@@ -1,6 +1,7 @@
 module "network" {
   source                         = "github.com/ministryofjustice/opg-terraform-aws-firewalled-network?ref=v1.3.2"
   cidr                           = var.network_cidr_block
+  network_firewall_enabled       = false
   default_security_group_ingress = [{}]
   default_security_group_egress  = [{}]
   providers = {
