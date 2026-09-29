@@ -9,7 +9,7 @@ module "network" {
 }
 
 module "firewalled_network" {
-  source                              = "github.com/ministryofjustice/opg-terraform-aws-firewalled-network?ref=v1.3.2"
+  source                              = "github.com/ministryofjustice/opg-terraform-aws-firewalled-network?ref=v1.3.3"
   cidr                                = var.network_cidr_block
   aws_networkfirewall_firewall_policy = aws_networkfirewall_firewall_policy.main
   default_security_group_ingress      = [{}]
