@@ -12,9 +12,13 @@ module "firewalled_network" {
   source                              = "github.com/ministryofjustice/opg-terraform-aws-firewalled-network?ref=v1.3.2"
   cidr                                = var.network_cidr_block
   aws_networkfirewall_firewall_policy = aws_networkfirewall_firewall_policy.main
-  network_firewall_enabled            = false
   default_security_group_ingress      = [{}]
   default_security_group_egress       = [{}]
+  network_firewall_enabled            = var.account.network_firewall.enabled
+  shared_firewall_configuration = var.account.network_firewall.shared_firewall_configuration.enabled != true ? null : {
+    account_id   = var.account.network_firewall.shared_firewall_configuration.account_id
+    account_name = var.account.network_firewall.shared_firewall_configuration.account_name
+  }
   providers = {
     aws = aws.region
   }

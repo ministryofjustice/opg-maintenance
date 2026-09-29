@@ -15,10 +15,6 @@ variable "default_role" {
   type    = string
   default = "opg-maintenance-ci"
 }
-variable "management_role" {
-  type    = string
-  default = "opg-maintenance-ci"
-}
 
 provider "aws" {
   alias  = "eu_west_2"
