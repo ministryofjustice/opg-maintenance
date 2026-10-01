@@ -1,8 +1,9 @@
 data "aws_vpc" "main" {
-  filter {
-    name   = "tag:application"
-    values = ["opg-maintenance"]
-  }
+  id = var.vpc_id
+  # filter {
+  #   name   = "tag:application"
+  #   values = ["opg-maintenance"]
+  # }
   provider = aws.region
 }
 
