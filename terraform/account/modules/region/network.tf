@@ -26,7 +26,7 @@ module "firewalled_network" {
 
 
 resource "aws_networkfirewall_firewall_policy" "main" {
-  name = "main"
+  name = "opg-maintenance-main"
 
   firewall_policy {
     stateless_default_actions          = ["aws:forward_to_sfe"]
@@ -40,11 +40,12 @@ resource "aws_networkfirewall_firewall_policy" "main" {
       resource_arn = aws_networkfirewall_rule_group.rule_file.arn
     }
   }
+  provider = aws.region
 }
 
 resource "aws_networkfirewall_rule_group" "rule_file" {
   capacity = 100
-  name     = "main-${replace(filebase64sha256("${path.module}/network_firewall_rules.rules.tpl"), "/[^[:alnum:]]/", "")}"
+  name     = "opg-maintenance-main-${replace(filebase64sha256("${path.module}/network_firewall_rules.rules.tpl"), "/[^[:alnum:]]/", "")}"
   type     = "STATEFUL"
   rules = templatefile("${path.module}/network_firewall_rules.rules.tpl", {
     allowed_domains          = var.account.network_firewall.allowed_domains
@@ -54,4 +55,5 @@ resource "aws_networkfirewall_rule_group" "rule_file" {
   lifecycle {
     create_before_destroy = true
   }
+  provider = aws.region
 }
