@@ -76,10 +76,10 @@ data "aws_caller_identity" "management" {
 
 module "vpc_endpoints" {
   source                          = "./modules/vpc_endpoints"
-  vpc_id                          = module.network.vpc.id
-  application_subnets_cidr_blocks = module.network.application_subnets[*].cidr_block
-  application_subnets_id          = module.network.application_subnets[*].id
-  public_subnets_cidr_blocks      = module.network.public_subnets[*].cidr_block
+  vpc_id                          = module.firewalled_network.vpc.id
+  application_subnets_cidr_blocks = module.firewalled_network.application_subnets[*].cidr_block
+  application_subnets_id          = module.firewalled_network.application_subnets[*].id
+  public_subnets_cidr_blocks      = module.firewalled_network.public_subnets[*].cidr_block
   application_route_tables        = data.aws_route_tables.firewalled_network_application
   management_account_id           = data.aws_caller_identity.management.account_id
   providers = {
