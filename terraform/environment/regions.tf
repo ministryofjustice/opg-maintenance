@@ -8,6 +8,7 @@ module "eu_west_2" {
   application_log_retention_days        = local.environment.cloudwatch_log_groups.application_log_retention_days
   account_name                          = local.environment.account_name
   enable_deletion_protection            = local.environment.application_load_balancer.enable_deletion_protection
+  vpc_id                                = local.environment.vpc_id
   providers = {
     aws.region     = aws.eu_west_2
     aws.management = aws.management_eu_west_2
