@@ -57,3 +57,32 @@ resource "aws_networkfirewall_rule_group" "rule_file" {
   }
   provider = aws.region
 }
+
+data "aws_route_tables" "firewalled_network_application" {
+  filter {
+    name   = "tag:Name"
+    values = ["application-route-table"]
+  }
+  filter {
+    name   = "vpc-id"
+    values = [module.firewalled_network.vpc.id]
+  }
+  provider = aws.region
+}
+
+data "aws_caller_identity" "management" {
+  provider = aws.management
+}
+
+module "vpc_endpoints" {
+  source                          = "./modules/vpc_endpoints"
+  vpc_id                          = module.network.vpc.id
+  application_subnets_cidr_blocks = module.network.application_subnets[*].cidr_block
+  application_subnets_id          = module.network.application_subnets[*].id
+  public_subnets_cidr_blocks      = module.network.public_subnets[*].cidr_block
+  application_route_tables        = data.aws_route_tables.firewalled_network_application
+  management_account_id           = data.aws_caller_identity.management.account_id
+  providers = {
+    aws.region = aws.region
+  }
+}
