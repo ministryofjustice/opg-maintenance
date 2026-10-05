@@ -17,7 +17,7 @@ module "eu_west_2" {
 
 data "aws_ecr_repository" "maintenance_app" {
   name     = "maintenance/maintenance_app"
-  provider = aws.management_eu_west_1
+  provider = aws.management_eu_west_2
 }
 
 output "maintenance_url" {
