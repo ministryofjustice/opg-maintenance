@@ -14,6 +14,8 @@ module "firewalled_network" {
   aws_networkfirewall_firewall_policy = aws_networkfirewall_firewall_policy.main
   default_security_group_ingress      = [{}]
   default_security_group_egress       = [{}]
+  enable_dns_hostnames                = true
+  enable_dns_support                  = true
   network_firewall_enabled            = var.account.network_firewall.enabled
   shared_firewall_configuration = var.account.network_firewall.shared_firewall_configuration.enabled != true ? null : {
     account_id   = var.account.network_firewall.shared_firewall_configuration.account_id
