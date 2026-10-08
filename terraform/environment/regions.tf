@@ -17,7 +17,7 @@ module "eu_west_2" {
 
 data "aws_ecr_repository" "maintenance_app" {
   name     = "maintenance/maintenance_app"
-  provider = aws.management_eu_west_1
+  provider = aws.management_eu_west_2
 }
 
 output "maintenance_url" {
@@ -25,5 +25,5 @@ output "maintenance_url" {
 }
 
 module "allow_list" {
-  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v2.3.0"
+  source = "git@github.com:ministryofjustice/terraform-aws-moj-ip-whitelist.git?ref=v3.5.2"
 }

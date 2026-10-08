@@ -12,6 +12,7 @@ variable "maintenance_service_capacity_provider" {
 variable "ingress_allow_list_cidr" {
   type        = list(string)
   description = "List of CIDR ranges permitted to access the service"
+  sensitive   = true
 }
 
 variable "maintenance_service_container_version" {
