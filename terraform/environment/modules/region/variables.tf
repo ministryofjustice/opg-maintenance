@@ -12,6 +12,7 @@ variable "maintenance_service_capacity_provider" {
 variable "ingress_allow_list_cidr" {
   type        = list(string)
   description = "List of CIDR ranges permitted to access the service"
+  sensitive   = true
 }
 
 variable "maintenance_service_container_version" {
@@ -42,4 +43,8 @@ variable "account_name" {
 variable "enable_deletion_protection" {
   type        = bool
   description = "If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer. Defaults to false."
+}
+
+variable "vpc_id" {
+  type = string
 }

@@ -22,6 +22,15 @@ resource "aws_ecs_service" "maintenance" {
     container_name   = "app"
     container_port   = 80
   }
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
+  timeouts {
+    create = "6m"
+    update = "6m"
+  }
 
   lifecycle {
     create_before_destroy = true
