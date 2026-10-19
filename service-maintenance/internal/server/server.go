@@ -49,6 +49,8 @@ func NewServer() http.Handler {
 	router.Handle("/en-gb/make-a-lasting-power-of-attorney", handlers.StaticMaintenanceHandler("Make a LPA English", "mal_en_maintenance.page.gohtml"))
 	router.Handle("/en-gb/modernised-make-a-lasting-power-of-attorney", handlers.StaticMaintenanceHandler("Modernised Make a LPA English", "mlpab_en_maintenance.page.gohtml"))
 	router.Handle("/cy/moderneiddio-gwneud-atwrneiaeth-arhosol", handlers.StaticMaintenanceHandler("Modernised Make a LPA Welsh", "mlpab_cy_maintenance.page.gohtml"))
+	router.Handle("/en-gb/complete-the-deputy-report", handlers.StaticMaintenanceHandler("Complete the deputy report English", "digideps_en_maintenance.page.gohtml"))
+  router.Handle("/en-gb/complete-the-deputy-report", handlers.StaticMaintenanceHandler("Serve OPG English", "serve_en_maintenance.page.gohtml"))
 
 	router.Handle("/en-gb/use-a-lasting-power-of-attorney/planned", handlers.StaticMaintenanceHandler("Use a LPA English Planned Downtime", "ual_en_planned_maintenance.page.gohtml"))
 	router.Handle("/cy/defnyddio-atwrneiaeth-arhosol/planned", handlers.StaticMaintenanceHandler("Use a LPA Welsh Planned Downtime", "ual_cy_planned_maintenance.page.gohtml"))
