@@ -116,9 +116,13 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: "maintenance_dev_${{ needs.workflow_variables.outputs.workspace_name }}"
-      # url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
+      url: "${{ steps.extract_environment_url.outputs.maintenance_url }}/maintenance"
     needs: [pr_deploy, workflow_variables, terraform_account_workflow_development]
     steps:
+      - name: Extract environment URL
+        id: extract_environment_url
+        run: |
+          echo "maintenance_url=$(fromJSON '${{ needs.pr_deploy.outputs }}').maintenance_url" >> $GITHUB_OUTPUT"
       - name: End of PR Workflow
         run: |
           echo "${WORKSPACE_NAME} PR environment tested, built and deployed"
