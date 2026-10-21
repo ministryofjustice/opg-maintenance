@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: "maintenance_dev_${{ needs.workflow_variables.outputs.workspace_name }}"
-      # url: "${{ needs.pr_deploy.outputs.terraform_maintenance_url }}/maintenance"
+      url: "${{ needs.pr_deploy.outputs.maintenance_url }}/maintenance"
     needs: [pr_deploy, workflow_variables, terraform_account_workflow_development]
     steps:
       - name: End of PR Workflow
