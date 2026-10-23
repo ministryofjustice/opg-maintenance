@@ -3,10 +3,9 @@ FROM node:24-alpine@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec
 WORKDIR /app
 
 COPY web/assets web/assets
-COPY webpack.config.js .
 COPY package.json package-lock.json ./
 
-RUN npm ci && node_modules/.bin/webpack --mode="production"
+RUN npm ci --ignore-scripts && npm run build
 
 # Build Go app
 FROM golang:1.26-alpine@sha256:27f2d3b83cfc5803c8078f8e730af0f7c431bf067afaec8f60a36fb763187cba AS build-env
