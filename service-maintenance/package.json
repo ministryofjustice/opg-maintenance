@@ -3,21 +3,16 @@
   "version": "0.1.0",
   "license": "OGL",
   "scripts": {
-    "build": "webpack -p",
-    "watch": "webpack --mode development --watch"
+    "build": "npm run build:js && npm run build:css && npm run build:assets",
+    "build:js": "esbuild --bundle web/assets/load-classes.js web/assets/main.js --minify --outdir=web/static/javascript --sourcemap --resolve-extensions=.mjs,.js --format=esm",
+    "build:css": "sass --load-path . --style compressed web/assets/main.scss web/static/stylesheets/all.css",
+    "build:assets": "mkdir -p web/static/assets/images web/static/assets/fonts && cp node_modules/govuk-frontend/dist/govuk/assets/images/* node_modules/@ministryofjustice/frontend/moj/assets/images/* web/static/assets/images && cp node_modules/govuk-frontend/dist/govuk/assets/fonts/* web/static/assets/fonts",
+    "watch": "npm run build:js --watch=forever & npm run build:css --watch"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.10",
-    "@babel/preset-env": "^7.17.10",
     "@ministryofjustice/frontend": "^11.1.0",
-    "babel-loader": "^10.0.0",
-    "copy-webpack-plugin": "^14.0.0",
-    "css-loader": "^7.1.2",
+    "esbuild": "^0.28.2",
     "govuk-frontend": "^6.0.0",
-    "mini-css-extract-plugin": "^2.9.4",
-    "sass": "^1.51.0",
-    "sass-loader": "^16.0.6",
-    "webpack": "^5.72.1",
-    "webpack-cli": "^6.0.1"
+    "sass": "^1.51.0"
   }
 }
