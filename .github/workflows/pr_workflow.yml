@@ -80,7 +80,7 @@ jobs:
 
   terraform_account_workflow_development:
     name: TF Development - Account
-    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@84a762ecab4a2d6217be908505351fd1f9312319 # v3.19.19
+    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@9bc93159f1f753bc458df23d76b5480c7c87e0a9 # v3.19.20
     needs:
       - workflow_variables
     with:
@@ -93,7 +93,7 @@ jobs:
 
   pr_deploy:
     name: ${{ needs.workflow_variables.outputs.workspace_name }} Environment Deploy
-    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@84a762ecab4a2d6217be908505351fd1f9312319 # v3.19.19
+    uses: ministryofjustice/opg-github-workflows/.github/workflows/build-infrastructure-terraform-oidc.yml@9bc93159f1f753bc458df23d76b5480c7c87e0a9 # v3.19.20
     needs: [docker_build_scan_push, workflow_variables]
     with:
       terraform_version: ${{ needs.workflow_variables.outputs.environment_terraform_version }}
